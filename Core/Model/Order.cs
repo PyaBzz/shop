@@ -1,21 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core
 {
-    public class Order
+    public interface IOrder
     {
-        private Order() { }
-        public int Id { get; private set; }
+        int CustomerId { get; }
+        IEnumerable<IOrderItem> Items { get; }
+        bool Add(IOrderItem item);
+        decimal Amount { get; }
+        bool Submit();
+    }
+
+    public class Order : IOrder
+    {
         public int CustomerId { get; private set; }
-        public List<int> ItemIds { get; private set; }
-        public Order Create(int customerId)
+        public IEnumerable<IOrderItem> Items => items;
+        public bool Add(IOrderItem item)
         {
-            var instance = new Order
+            items.Add(item);
+            return true;
+        }
+        public decimal Amount => Items.Sum(x => x.Amount);
+        public bool Submit() => throw new NotImplementedException();
+
+        private List<IOrderItem> items = new List<IOrderItem>();
+
+        private Order() { }
+        public static Order Create(int customerId)
+        {
+            return new Order
             {
-                CustomerId = customerId
+                CustomerId = customerId,
             };
-            return instance;
         }
     }
 }
