@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class Order : IOrder
+    public class Order : IPersistable, IOrder
     {
+        public int? Id { get; private set; }
         public int CustomerId { get; private set; }
         public IOrderItem[] Items => items.Values.ToArray();
         public bool Add(IOrderItem item)
@@ -17,6 +18,7 @@ namespace Core
             return true;
         }
         public decimal Amount => Items.Sum(x => x.Amount);
+
         public async Task<int> Submit() => await repo.Save(this);
 
         private readonly Dictionary<int, IOrderItem> items = new Dictionary<int, IOrderItem>();
@@ -32,10 +34,10 @@ namespace Core
         }
     }
 
-    public interface IOrderItem : IDispatchItem
+    public interface IOrderItem
     {
-        new int ProductId { get; }
-        new int Quantity { get; }
+        int ProductId { get; }
+        int Quantity { get; }
         string ProductName { get; }
         decimal UnitPrice { get; }
         decimal Amount { get; }

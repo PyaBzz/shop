@@ -2,6 +2,11 @@ using System.Threading.Tasks;
 
 namespace Core
 {
+    public interface IPersistable
+    {
+        int? Id { get; }
+    }
+
     public interface IDispatchItem
     {
         int ProductId { get; }

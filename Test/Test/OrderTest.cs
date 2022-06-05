@@ -128,7 +128,6 @@ namespace Test
             var sut1 = GetSut();
             var id1 = mockedId;
             repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id1));
-
             Assert.Equal(id1, await sut1.Submit());
         }
     }
