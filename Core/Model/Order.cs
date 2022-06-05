@@ -38,4 +38,13 @@ namespace Core
             };
         }
     }
+
+    public interface IOrderItem : IDispatchItem
+    {
+        new int ProductId { get; }
+        new int Quantity { get; }
+        string ProductName { get; }
+        decimal UnitPrice { get; }
+        decimal Amount { get; }
+    }
 }
