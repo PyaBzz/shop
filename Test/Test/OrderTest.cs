@@ -34,11 +34,12 @@ namespace Test
         [Fact]
         public void Create_InitialisesState()
         {
-            var id = mockedId;
+            var customerId = mockedId;
             var mockedRepo = new Mock<IOrderRepository>().Object;
-            var sut = Order.Create(mockedRepo, id);
+            var sut = Order.Create(mockedRepo, customerId);
+            Assert.Null(sut.Id);
+            Assert.Equal(customerId, sut.CustomerId);
             Assert.Equal(0, sut.Items.Length);
-            Assert.Equal(id, sut.CustomerId);
         }
 
         [Fact]
@@ -118,17 +119,22 @@ namespace Test
         }
 
         [Fact]
-        public async Task Submit_ReturnsTheAssignedIdAsync()
+        public async Task Submit_AssignsId()
         {
-            var sut0 = GetSut();
-            var id0 = mockedId;
-            repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id0));
-            Assert.Equal(id0, await sut0.Submit());
+            var sut = GetSut();
+            var id = mockedId;
+            repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id));
+            await sut.Submit();
+            Assert.Equal(id, sut.Id);
+        }
 
-            var sut1 = GetSut();
-            var id1 = mockedId;
-            repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id1));
-            Assert.Equal(id1, await sut1.Submit());
+        [Fact]
+        public async Task Submit_ReturnsTheAssignedId()
+        {
+            var sut = GetSut();
+            var id = mockedId;
+            repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id));
+            Assert.Equal(id, await sut.Submit());
         }
     }
 }

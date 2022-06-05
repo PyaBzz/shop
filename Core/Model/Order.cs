@@ -19,7 +19,11 @@ namespace Core
         }
         public decimal Amount => Items.Sum(x => x.Amount);
 
-        public async Task<int> Submit() => await repo.Save(this);
+        public async Task<int> Submit()
+        {
+            Id = await repo.Save(this);
+            return Id.Value;
+        }
 
         private readonly Dictionary<int, IOrderItem> items = new Dictionary<int, IOrderItem>();
         private readonly IOrderRepository repo;
