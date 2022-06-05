@@ -16,7 +16,7 @@ namespace Core
     public class Order : IOrder
     {
         public int CustomerId { get; private set; }
-        public IEnumerable<IOrderItem> Items => items.Values.ToArray();
+        public IEnumerable<IOrderItem> Items => items.Values;
         public bool Add(IOrderItem item)
         {
             if (items.ContainsKey(item.ProductId))

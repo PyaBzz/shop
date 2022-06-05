@@ -15,6 +15,22 @@ namespace Test
             return Order.Create(id);
         }
 
+        private IOrderItem CreateMockItem(int? id = null, decimal? amount = null)
+        {
+            var mocker = new Mock<IOrderItem>();
+            if (id.HasValue)
+                mocker.SetupGet(x => x.ProductId).Returns(id.Value);
+            else
+                mocker.SetupGet(x => x.ProductId).Returns(rng.Next());
+
+            if (amount.HasValue)
+            {
+                mocker.SetupGet(x => x.Amount).Returns(amount.Value);
+                return mocker.Object;
+            }
+            return mocker.Object;
+        }
+
         [Fact]
         public void Create_InitialisesState()
         {
@@ -28,14 +44,9 @@ namespace Test
         {
             var sut = GetSut();
 
-            var itemMocker0 = new Mock<IOrderItem>();
-            itemMocker0.SetupGet(x => x.ProductId).Returns(rng.Next());
-            var itemMock0 = itemMocker0.Object;
+            var itemMock0 = CreateMockItem();
             sut.Add(itemMock0);
-
-            var itemMocker1 = new Mock<IOrderItem>();
-            itemMocker1.SetupGet(x => x.ProductId).Returns(rng.Next());
-            var itemMock1 = itemMocker1.Object;
+            var itemMock1 = CreateMockItem();
             sut.Add(itemMock1);
 
             Assert.Collection(
@@ -50,8 +61,7 @@ namespace Test
         {
             var sut = GetSut();
 
-            var itemMocker0 = new Mock<IOrderItem>();
-            var itemMock0 = itemMocker0.Object;
+            var itemMock0 = CreateMockItem();
             var result = sut.Add(itemMock0);
 
             Assert.True(result);
@@ -64,14 +74,10 @@ namespace Test
             var sut = GetSut();
             var productId = rng.Next();
 
-            var itemMocker0 = new Mock<IOrderItem>();
-            itemMocker0.SetupGet(x => x.ProductId).Returns(productId);
-            var itemMock0 = itemMocker0.Object;
+            var itemMock0 = CreateMockItem(productId);
             Assert.True(sut.Add(itemMock0));
 
-            var itemMocker1 = new Mock<IOrderItem>();
-            itemMocker1.SetupGet(x => x.ProductId).Returns(productId);
-            var itemMock1 = itemMocker1.Object;
+            var itemMock1 = CreateMockItem(productId);
             Assert.False(sut.Add(itemMock1));
         }
 
@@ -81,17 +87,11 @@ namespace Test
             var sut = GetSut();
 
             var amount0 = Utils.GetRandom(0, 200);
-            var itemMocker0 = new Mock<IOrderItem>();
-            itemMocker0.SetupGet(x => x.ProductId).Returns(rng.Next());
-            itemMocker0.SetupGet(x => x.Amount).Returns(amount0);
-            var itemMock0 = itemMocker0.Object;
+            var itemMock0 = CreateMockItem(null, amount0);
             sut.Add(itemMock0);
 
             var amount1 = Utils.GetRandom(0, 200);
-            var itemMocker1 = new Mock<IOrderItem>();
-            itemMocker1.SetupGet(x => x.ProductId).Returns(rng.Next());
-            itemMocker1.SetupGet(x => x.Amount).Returns(amount1);
-            var itemMock1 = itemMocker1.Object;
+            var itemMock1 = CreateMockItem(null, amount1);
             sut.Add(itemMock1);
 
             var total = amount0 + amount1;
