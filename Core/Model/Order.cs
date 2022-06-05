@@ -7,7 +7,7 @@ namespace Core
     public interface IOrder
     {
         int CustomerId { get; }
-        IEnumerable<IOrderItem> Items { get; }
+        IOrderItem[] Items { get; }
         bool Add(IOrderItem item);
         decimal Amount { get; }
         bool Submit();
@@ -16,7 +16,7 @@ namespace Core
     public class Order : IOrder
     {
         public int CustomerId { get; private set; }
-        public IEnumerable<IOrderItem> Items => items.Values;
+        public IOrderItem[] Items => items.Values.ToArray();
         public bool Add(IOrderItem item)
         {
             if (items.ContainsKey(item.ProductId))

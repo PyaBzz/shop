@@ -36,6 +36,7 @@ namespace Test
         {
             var id = rng.Next();
             var sut = Order.Create(id);
+            Assert.Equal(0, sut.Items.Length);
             Assert.Equal(id, sut.CustomerId);
         }
 
@@ -46,8 +47,10 @@ namespace Test
 
             var itemMock0 = CreateMockItem();
             sut.Add(itemMock0);
+            Assert.Equal(1, sut.Items.Length);
             var itemMock1 = CreateMockItem();
             sut.Add(itemMock1);
+            Assert.Equal(2, sut.Items.Length);
 
             Assert.Collection(
                 sut.Items,
@@ -65,7 +68,22 @@ namespace Test
             var result = sut.Add(itemMock0);
 
             Assert.True(result);
-            Assert.Collection(sut.Items, x => Assert.Same(itemMock0, x));
+            Assert.Equal(1, sut.Items.Length);
+        }
+
+        [Fact]
+        public void Add_DoesNotAddDuplicateProduct()
+        {
+            var sut = GetSut();
+            var productId = rng.Next();
+
+            var itemMock0 = CreateMockItem(productId);
+            sut.Add(itemMock0);
+            Assert.Equal(1, sut.Items.Length);
+
+            var itemMock1 = CreateMockItem(productId);
+            sut.Add(itemMock1);
+            Assert.Equal(1, sut.Items.Length);
         }
 
         [Fact]
