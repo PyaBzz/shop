@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Core
 {
     public interface IDispatchItem
@@ -12,6 +14,6 @@ namespace Core
         IOrderItem[] Items { get; }
         bool Add(IOrderItem item);
         decimal Amount { get; }
-        bool Submit();
+        Task<int> Submit();
     }
 }

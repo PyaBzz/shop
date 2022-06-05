@@ -17,16 +17,17 @@ namespace Core
             return true;
         }
         public decimal Amount => Items.Sum(x => x.Amount);
-        public bool Submit() => throw new NotImplementedException();
+        public async Task<int> Submit() => await repo.Save(this);
 
-        private Dictionary<int, IOrderItem> items = new Dictionary<int, IOrderItem>();
+        private readonly Dictionary<int, IOrderItem> items = new Dictionary<int, IOrderItem>();
+        private readonly IOrderRepository repo;
 
-        private Order() { }
-        public static Order Create(int customerId)
+        private Order(IOrderRepository r) => repo = r;
+        public static Order Create(IOrderRepository r, int customerId)
         {
-            return new Order
+            return new Order(r)
             {
-                CustomerId = customerId,
+                CustomerId = customerId
             };
         }
     }
