@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Core
 {
-    public interface IOrder
-    {
-        int CustomerId { get; }
-        IOrderItem[] Items { get; }
-        bool Add(IOrderItem item);
-        decimal Amount { get; }
-        bool Submit();
-    }
-
     public class Order : IOrder
     {
         public int CustomerId { get; private set; }
@@ -46,5 +38,11 @@ namespace Core
         string ProductName { get; }
         decimal UnitPrice { get; }
         decimal Amount { get; }
+    }
+
+    public interface IOrderRepository
+    {
+        Task<int> Save(Order order);
+        Task<Order> Get(int id);
     }
 }
