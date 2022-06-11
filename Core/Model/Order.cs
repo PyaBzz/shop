@@ -5,8 +5,16 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class Order : IPersistable, IOrder
+    public class OrderDto
     {
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+    }
+
+    public class Order : IOrder
+    {
+        // ==============================  Interface  ==============================
+
         public int? Id { get; private set; }
         public int CustomerId { get; private set; }
         public IOrderItem[] Items => items.Values.ToArray();
@@ -19,22 +27,33 @@ namespace Core
         }
         public decimal Amount => Items.Sum(x => x.Amount);
 
-        public async Task<int> Submit()
+        public async Task<int> Submit(IOrderRepository r)
         {
-            Id = await repo.Save(this);
+            Id = await r.Save(this);
             return Id.Value;
         }
 
-        private readonly Dictionary<int, IOrderItem> items = new Dictionary<int, IOrderItem>();
-        private readonly IOrderRepository repo;
+        // ==============================  State  ==============================
 
-        private Order(IOrderRepository r) => repo = r;
-        public static Order Create(IOrderRepository r, int customerId)
+        private readonly Dictionary<int, IOrderItem> items = new Dictionary<int, IOrderItem>();
+
+        // ==============================  Factory  ==============================
+
+        private Order() { }
+
+        public static class Factory //todo: unit test the factory
         {
-            return new Order(r)
+            public static Order Create(int customerId) =>
+                new Order() { CustomerId = customerId };
+
+            public static async Task<Order> Retrieve(IOrderRepository r, int id)
             {
-                CustomerId = customerId
-            };
+                var dto = await r.Get(id);
+                return Create(dto);
+            }
+
+            private static Order Create(OrderDto dto) =>
+                new Order() { Id = dto.Id, CustomerId = dto.CustomerId };
         }
     }
 
@@ -50,6 +69,6 @@ namespace Core
     public interface IOrderRepository
     {
         Task<int> Save(Order order);
-        Task<Order> Get(int id);
+        Task<OrderDto> Get(int id);
     }
 }

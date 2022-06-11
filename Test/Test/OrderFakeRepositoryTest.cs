@@ -13,9 +13,9 @@ namespace Test
         private Order CreateOrder(int? customerId = null)
         {
             if (customerId.HasValue)
-                return Order.Create(sut, customerId.Value);
+                return Order.Factory.Create(customerId.Value);
             else
-                return Order.Create(sut, rng.Next());
+                return Order.Factory.Create(rng.Next());
         }
 
         [Fact]

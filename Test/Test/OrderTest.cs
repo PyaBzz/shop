@@ -13,7 +13,7 @@ namespace Test
         private IOrderRepository mockedRepo => repoMocker.Object;
         private int mockedId => rng.Next();
 
-        private Order GetSut() => Order.Create(mockedRepo, mockedId);
+        private Order GetSut() => Order.Factory.Create(mockedId);
 
         private IOrderItem CreateMockItem(int? id = null, decimal? amount = null)
         {
@@ -36,7 +36,7 @@ namespace Test
         {
             var customerId = mockedId;
             var mockedRepo = new Mock<IOrderRepository>().Object;
-            var sut = Order.Create(mockedRepo, customerId);
+            var sut = Order.Factory.Create(customerId);
             Assert.Null(sut.Id);
             Assert.Equal(customerId, sut.CustomerId);
             Assert.Equal(0, sut.Items.Length);
@@ -124,7 +124,7 @@ namespace Test
             var sut = GetSut();
             var id = mockedId;
             repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id));
-            await sut.Submit();
+            await sut.Submit(mockedRepo);
             Assert.Equal(id, sut.Id);
         }
 
@@ -134,7 +134,7 @@ namespace Test
             var sut = GetSut();
             var id = mockedId;
             repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id));
-            Assert.Equal(id, await sut.Submit());
+            Assert.Equal(id, await sut.Submit(mockedRepo));
         }
     }
 }

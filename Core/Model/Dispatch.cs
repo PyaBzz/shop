@@ -2,11 +2,6 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public interface IPersistable
-    {
-        int? Id { get; }
-    }
-
     public interface IDispatchItem
     {
         int ProductId { get; }
@@ -15,10 +10,11 @@ namespace Core
 
     public interface IOrder
     {
+        int? Id { get; }
         int CustomerId { get; }
         IOrderItem[] Items { get; }
         bool Add(IOrderItem item);
         decimal Amount { get; }
-        Task<int> Submit();
+        Task<int> Submit(IOrderRepository r);
     }
 }
