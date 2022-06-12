@@ -32,17 +32,6 @@ namespace Test
         }
 
         [Fact]
-        public void Create_InitialisesState()
-        {
-            var customerId = mockedId;
-            var mockedRepo = new Mock<IOrderRepository>().Object;
-            var sut = Order.Factory.Create(customerId);
-            Assert.Null(sut.Id);
-            Assert.Equal(customerId, sut.CustomerId);
-            Assert.Equal(0, sut.Items.Length);
-        }
-
-        [Fact]
         public void Add_AppendsToItems()
         {
             var sut = GetSut();
