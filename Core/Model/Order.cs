@@ -17,8 +17,10 @@ namespace Core
 
         public int? Id { get; private set; }
         public int CustomerId { get; private set; }
-        public IOrderItem[] Items => items.Values.ToArray();
-        public bool Add(IOrderItem item)
+        public IOrderItem[] Items =>
+            items.Values.Select(x => OrderItem.Factory.Create(this.Id, x.ProductId, x.Quantity))
+            .ToArray();
+        public bool Add(Item item)
         {
             if (items.ContainsKey(item.ProductId))
                 return false;
@@ -35,7 +37,7 @@ namespace Core
 
         // ==============================  State  ==============================
 
-        private readonly Dictionary<int, IOrderItem> items = new Dictionary<int, IOrderItem>();
+        private readonly Dictionary<int, Item> items = new Dictionary<int, Item>();
 
         // ==============================  Factory  ==============================
 

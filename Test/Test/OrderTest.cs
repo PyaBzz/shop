@@ -11,23 +11,22 @@ namespace Test
         private readonly Random rng = new Random();
         private readonly Mock<IOrderRepository> repoMocker = new Mock<IOrderRepository>();
         private IOrderRepository mockedRepo => repoMocker.Object;
-        private int mockedId => rng.Next();
+        private int mockedId => rng.Next(); //todo: rename to someRandomId
 
         private Order GetSut() => Order.Factory.Create(mockedId);
 
-        private IOrderItem CreateMockItem(int? id = null, decimal? amount = null)
+        private Item CreateMockItem(int? productId = null, int? quantity = null)
         {
-            var mocker = new Mock<IOrderItem>();
-            if (id.HasValue)
-                mocker.SetupGet(x => x.ProductId).Returns(id.Value);
+            var mocker = new Mock<Item>();
+            if (productId.HasValue)
+                mocker.SetupGet(x => x.ProductId).Returns(productId.Value);
             else
                 mocker.SetupGet(x => x.ProductId).Returns(mockedId);
 
-            if (amount.HasValue)
-            {
-                mocker.SetupGet(x => x.Amount).Returns(amount.Value);
-                return mocker.Object;
-            }
+            if (quantity.HasValue)
+                mocker.SetupGet(x => x.Quantity).Returns(quantity.Value);
+            else
+                mocker.SetupGet(x => x.Quantity).Returns(mockedId);
             return mocker.Object;
         }
 
@@ -36,17 +35,19 @@ namespace Test
         {
             var sut = GetSut();
 
-            var itemMock0 = CreateMockItem();
+            var prodcutId0 = mockedId;
+            var itemMock0 = CreateMockItem(prodcutId0);
             sut.Add(itemMock0);
             Assert.Equal(1, sut.Items.Length);
-            var itemMock1 = CreateMockItem();
+            var productId1 = mockedId;
+            var itemMock1 = CreateMockItem(productId1);
             sut.Add(itemMock1);
             Assert.Equal(2, sut.Items.Length);
 
             Assert.Collection(
                 sut.Items,
-                x => Assert.Same(itemMock0, x),
-                x => Assert.Same(itemMock1, x)
+                x => Assert.Equal(prodcutId0, x.ProductId),
+                x => Assert.Equal(productId1, x.ProductId)
                 );
         }
 
@@ -90,22 +91,22 @@ namespace Test
             Assert.False(sut.Add(itemMock1));
         }
 
-        [Fact]
-        public void Amount_SumsAmountsOfItems()
-        {
-            var sut = GetSut();
+        // [Fact]
+        // public void Amount_SumsAmountsOfItems()
+        // {
+        //     var sut = GetSut();
 
-            var amount0 = Utils.GetRandom(0, 200);
-            var itemMock0 = CreateMockItem(null, amount0);
-            sut.Add(itemMock0);
+        //     var amount0 = Utils.GetRandom(0, 200);
+        //     var itemMock0 = CreateMockItem(null, amount0);
+        //     sut.Add(itemMock0);
 
-            var amount1 = Utils.GetRandom(0, 200);
-            var itemMock1 = CreateMockItem(null, amount1);
-            sut.Add(itemMock1);
+        //     var amount1 = Utils.GetRandom(0, 200);
+        //     var itemMock1 = CreateMockItem(null, amount1);
+        //     sut.Add(itemMock1);
 
-            var total = amount0 + amount1;
-            Assert.Equal(total, sut.Amount);
-        }
+        //     var total = amount0 + amount1;
+        //     Assert.Equal(total, sut.Amount);
+        // }
 
         [Fact]
         public async Task Submit_AssignsId()

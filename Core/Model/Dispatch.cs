@@ -2,8 +2,9 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public interface IDispatchItem
+    public interface Item
     {
+        int? OrderId { get; }
         int ProductId { get; }
         int Quantity { get; }
     }
@@ -13,7 +14,7 @@ namespace Core
         int? Id { get; }
         int CustomerId { get; }
         IOrderItem[] Items { get; }
-        bool Add(IOrderItem item);
+        bool Add(Item item);
         decimal Amount { get; }
         Task<int> Stage(IOrderRepository r);
     }
