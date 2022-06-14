@@ -113,7 +113,7 @@ namespace Test
             var sut = GetSut();
             var id = mockedId;
             repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id));
-            await sut.Submit(mockedRepo);
+            await sut.Stage(mockedRepo);
             Assert.Equal(id, sut.Id);
         }
 
@@ -123,7 +123,7 @@ namespace Test
             var sut = GetSut();
             var id = mockedId;
             repoMocker.Setup(x => x.Save(It.IsAny<Order>())).Returns(Task.FromResult(id));
-            Assert.Equal(id, await sut.Submit(mockedRepo));
+            Assert.Equal(id, await sut.Stage(mockedRepo));
         }
     }
 }

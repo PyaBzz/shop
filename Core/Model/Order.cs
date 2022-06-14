@@ -27,7 +27,7 @@ namespace Core
         }
         public decimal Amount => Items.Sum(x => x.Amount);
 
-        public async Task<int> Submit(IOrderRepository r)
+        public async Task<int> Stage(IOrderRepository r)
         {
             Id = await r.Save(this);
             return Id.Value;
@@ -57,6 +57,12 @@ namespace Core
         }
     }
 
+    public interface IOrderRepository
+    {
+        Task<int> Save(Order order);
+        Task<OrderDto> Get(int id);
+    }
+
     public interface IOrderItem
     {
         int ProductId { get; }
@@ -64,11 +70,5 @@ namespace Core
         string ProductName { get; }
         decimal UnitPrice { get; }
         decimal Amount { get; }
-    }
-
-    public interface IOrderRepository
-    {
-        Task<int> Save(Order order);
-        Task<OrderDto> Get(int id);
     }
 }
