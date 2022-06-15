@@ -5,12 +5,6 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class OrderDto
-    {
-        public int Id { get; set; }
-        public int CustomerId { get; set; }
-    }
-
     public class Order : IOrder
     {
         // ==============================  Interface  ==============================
@@ -39,6 +33,12 @@ namespace Core
 
         private readonly Dictionary<int, Item> items = new Dictionary<int, Item>();
 
+        public class State
+        {
+            public int Id { get; set; }
+            public int CustomerId { get; set; }
+        }
+
         // ==============================  Factory  ==============================
 
         private Order() { }
@@ -50,19 +50,19 @@ namespace Core
 
             public static async Task<Order> Retrieve(IOrderRepository r, int id)
             {
-                var dto = await r.Get(id);
-                return Create(dto);
+                var state = await r.Get(id);
+                return Create(state);
             }
 
-            private static Order Create(OrderDto dto) =>
-                new Order() { Id = dto.Id, CustomerId = dto.CustomerId };
+            private static Order Create(State state) =>
+                new Order() { Id = state.Id, CustomerId = state.CustomerId };
         }
     }
 
     public interface IOrderRepository
     {
         Task<int> Save(Order order);
-        Task<OrderDto> Get(int id);
+        Task<Order.State> Get(int id);
     }
 
     public interface IOrderItem

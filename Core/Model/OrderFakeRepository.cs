@@ -6,12 +6,12 @@ namespace Core
 {
     public class OrderFakeRepository : IOrderRepository
     {
-        private readonly Dictionary<int, OrderDto> data = new Dictionary<int, OrderDto>();
+        private readonly Dictionary<int, Order.State> data = new Dictionary<int, Order.State>();
 
         public Task<int> Save(Order order)
         {
             var nextId = data.Count;
-            data.Add(nextId, new OrderDto
+            data.Add(nextId, new Order.State
             {
                 Id = nextId,
                 CustomerId = order.CustomerId
@@ -19,11 +19,11 @@ namespace Core
             return Task.FromResult(nextId);
         }
 
-        public Task<OrderDto> Get(int id)
+        public Task<Order.State> Get(int id)
         {
             if (data.ContainsKey(id))
                 return Task.FromResult(data[id]);
-            return Task.FromResult<OrderDto>(default);
+            return Task.FromResult<Order.State>(default);
         }
     }
 }

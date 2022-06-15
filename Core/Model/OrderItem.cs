@@ -2,7 +2,7 @@
 
 namespace Core
 {
-    public class ItemDto : Item
+    public class ItemState : Item
     {
         public int? OrderId { get; set; }
         public int ProductId { get; set; }

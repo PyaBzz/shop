@@ -30,7 +30,7 @@ namespace Test
             var customerId = mockedId;
             repoMocker
               .Setup(x => x.Get(It.IsAny<int>()))
-              .Returns(Task.FromResult(new OrderDto { Id = id, CustomerId = customerId }));
+              .Returns(Task.FromResult(new Order.State { Id = id, CustomerId = customerId }));
             var order = await Order.Factory.Retrieve(mockedRepo, id);
             Assert.Equal(id, order.Id);
             Assert.Equal(customerId, order.CustomerId);
