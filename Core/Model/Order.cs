@@ -12,13 +12,13 @@ namespace Core
         public int? Id { get; private set; }
         public int CustomerId { get; private set; }
         public IOrderItem[] Items =>
-            items.Values.Select(x => OrderItem.Factory.Create(this.Id, x.ProductId, x.Quantity))
+            itemIds.Values.Select(x => OrderItem.Factory.Create(this.Id, x.ProductId, x.Quantity))
             .ToArray();
         public bool Add(Item item)
         {
-            if (items.ContainsKey(item.ProductId))
+            if (itemIds.ContainsKey(item.ProductId))
                 return false;
-            items.Add(item.ProductId, item);
+            itemIds.Add(item.ProductId, item);
             return true;
         }
         public decimal Amount => Items.Sum(x => x.Amount);
@@ -31,13 +31,13 @@ namespace Core
 
         // ==============================  State  ==============================
 
-        private readonly Dictionary<int, Item> items = new Dictionary<int, Item>();
-
         public class State
         {
             public int Id { get; set; }
             public int CustomerId { get; set; }
         }
+
+        private readonly Dictionary<int, Item> itemIds = new Dictionary<int, Item>();
 
         // ==============================  Factory  ==============================
 
@@ -67,6 +67,7 @@ namespace Core
 
     public interface IOrderItem
     {
+        int? Id { get; }
         int ProductId { get; }
         int Quantity { get; }
         string ProductName { get; }
