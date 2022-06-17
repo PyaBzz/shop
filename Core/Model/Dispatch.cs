@@ -13,7 +13,7 @@ namespace Core
     {
         int? Id { get; }
         int CustomerId { get; }
-        IOrderItem[] Items { get; }
+        Task<IOrderItem[]> GetItems();
         bool Add(Item item);
         decimal Amount { get; }
         Task<int> Stage(IOrderRepository r);

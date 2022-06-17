@@ -11,17 +11,12 @@ namespace Core
 
         public int? Id { get; private set; }
         public int CustomerId { get; private set; }
-        public IOrderItem[] Items =>
-            itemIds.Values.Select(x => OrderItem.Factory.Create(this.Id, x.ProductId, x.Quantity))
-            .ToArray();
+        public async Task<IOrderItem[]> GetItems() => await itemFactory.RetrieveForOrder(this.Id.Value);
         public bool Add(Item item)
         {
-            if (itemIds.ContainsKey(item.ProductId))
-                return false;
-            itemIds.Add(item.ProductId, item);
-            return true;
+            throw new NotImplementedException();
         }
-        public decimal Amount => Items.Sum(x => x.Amount);
+        public decimal Amount => throw new NotImplementedException();
 
         public async Task<int> Stage(IOrderRepository r)
         {
@@ -37,28 +32,39 @@ namespace Core
             public int CustomerId { get; set; }
         }
 
-        private readonly Dictionary<int, Item> itemIds = new Dictionary<int, Item>();
+        private IOrderItemFactory itemFactory;
 
         // ==============================  Factory  ==============================
 
-        private Order() { }
+        private Order(IOrderItemFactory itemFac) { itemFactory = itemFac; }
 
-        public static class Factory //todo: unit test the factory
+        public class Factory : IOrderFactory//todo: make the factory non-static and unit test it
         {
-            public static Order Create(int customerId) =>
-                new Order() { CustomerId = customerId };
-
-            public static async Task<Order> Retrieve(IOrderRepository r, int id)
+            private IOrderRepository repo;
+            private IOrderItemFactory itemFactory;
+            public Factory(IOrderRepository r, IOrderItemFactory itemFac)
             {
-                var state = await r.Get(id);
+                repo = r;
+                itemFactory = itemFac;
+            }
+            public Order Create(int customerId) => new Order(itemFactory) { CustomerId = customerId };
+
+            public async Task<Order> Retrieve(int id)
+            {
+                var state = await repo.Get(id);
                 return Create(state);
             }
 
-            private static Order Create(State state) =>
-                new Order() { Id = state.Id, CustomerId = state.CustomerId };
+            private Order Create(State state) =>
+                new Order(itemFactory) { Id = state.Id, CustomerId = state.CustomerId };
         }
     }
 
+    public interface IOrderFactory
+    {
+        Order Create(int customerId);
+        Task<Order> Retrieve(int id);
+    }
     public interface IOrderRepository
     {
         Task<int> Save(Order order);
