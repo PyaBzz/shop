@@ -4,75 +4,60 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class OrderItem : Item, IOrderItem
+    public class OrderItem : IOrderItem
     {
-        // ==============================  Interface  ==============================
-        public int? Id { get; private set; }
-        public int? OrderId { get; private set; }
-        public int ProductId { get; private set; }
-        public string ProductName => throw new NotImplementedException();
-        public decimal UnitPrice => throw new NotImplementedException();
-        public int Quantity { get; private set; }
-        public decimal Amount => throw new NotImplementedException();
-
         // ==============================  State  ==============================
+        public int? orderId;
+        public int? productId;
+        private IProduct product;
+        private IProductRepository productRepo;
 
-        public class State
+        // ==============================  Dto  ==============================
+        public class Dto
         {
-            public int? OrderId { get; set; }
+            public int OrderId { get; set; }
             public int Id { get; set; }
             public int ProductId { get; set; }
             public int Quantity { get; set; }
         }
 
+        // ==============================  Interface  ==============================
+        public int? Id { get; private set; }
+        public IProduct Product => throw new NotImplementedException(); //todo: cache product from db
+        public int Quantity { get; private set; }
+        public decimal Price => Quantity * Product.Price;
+
         // ==============================  Factory  ==============================
-
-        private OrderItem() { }
-
-        public class Factory : IOrderItemFactory //todo: unit test the factory
+        public OrderItem(
+            IProductRepository product_repo,
+            int? order_id,
+            int product_id,
+            int quantity)
         {
-            private IOrderItemRepository repo;
-            public Factory(IOrderItemRepository r) => repo = r;
-            public OrderItem Create(int? orderId, int productId, int quantity) =>
-                new OrderItem()
-                {
-                    OrderId = orderId,
-                    ProductId = productId,
-                    Quantity = quantity,
-                };
-
-            public async Task<OrderItem> Retrieve(int id)
-            {
-                var state = await repo.Get(id);
-                return Create(state);
-            }
-            public async Task<OrderItem[]> RetrieveForOrder(int orderId)
-            {
-                var states = await repo.RetrieveForOrder(orderId);
-                return states.Select(x => Create(x)).ToArray();
-            }
-            private OrderItem Create(State state) =>
-                new OrderItem()
-                {
-                    Id = state.Id,
-                    OrderId = state.OrderId,
-                    ProductId = state.ProductId,
-                    Quantity = state.Quantity
-                };
+            productRepo = product_repo;
+            orderId = order_id;
+            productId = product_id;
+            Quantity = quantity;
         }
     }
 
-    public interface IOrderItemFactory
+    // ==============================  Required Interfaces  ==============================
+    // public interface IOrderItemRepository
+    // {
+    //     Task<int> Save(OrderItem item);
+    //     Task<OrderItem.Dto> Get(int id);
+    //     Task<OrderItem.Dto[]> GetForOrder(int orderId);
+    // }
+
+    public interface IProduct
     {
-        OrderItem Create(int? orderId, int productId, int quantity);
-        Task<OrderItem> Retrieve(int id);
-        Task<OrderItem[]> RetrieveForOrder(int orderId);
+        string Name { get; }
+        decimal Price { get; }
     }
 
-    public interface IOrderItemRepository
+    public interface IProductRepository
     {
-        Task<int> Save(OrderItem item);
-        Task<OrderItem.State> Get(int id);
-        Task<OrderItem.State[]> RetrieveForOrder(int orderId);
+        Task<int> Save(Product item);
+        Task<Product> Get(int id);
     }
 }
