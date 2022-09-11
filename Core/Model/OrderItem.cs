@@ -10,7 +10,7 @@ namespace Core
         public int? orderId;
         public int? productId;
         private IProduct product;
-        private IProductRepository productRepo;
+        private IProductRepo productRepo;
 
         // ==============================  Dto  ==============================
         public class Dto
@@ -28,11 +28,7 @@ namespace Core
         public decimal Price => Quantity * Product.Price;
 
         // ==============================  Factory  ==============================
-        public OrderItem(
-            IProductRepository product_repo,
-            int? order_id,
-            int product_id,
-            int quantity)
+        public OrderItem(IProductRepo product_repo, int? order_id, int product_id, int quantity)
         {
             productRepo = product_repo;
             orderId = order_id;
@@ -55,7 +51,7 @@ namespace Core
         decimal Price { get; }
     }
 
-    public interface IProductRepository
+    public interface IProductRepo
     {
         Task<int> Save(Product item);
         Task<Product> Get(int id);
