@@ -70,12 +70,4 @@ namespace Core
     //     Task<int> Save(Order order);
     //     Task<Order.State> Get(int id);
     // }
-
-    public interface IOrderItem
-    {
-        int? Id { get; }
-        IProduct Product { get; }
-        int Quantity { get; }
-        decimal Price { get; }
-    }
 }

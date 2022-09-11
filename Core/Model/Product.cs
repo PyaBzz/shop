@@ -2,19 +2,29 @@
 
 namespace Core
 {
-    public class Product
+    public interface IProduct
     {
-        // ==============================  State  ==============================
-        public int? Id { get; private set; }
+        string Name { get; }
+
+        decimal Price { get; }
+    }
+
+    public class Product : IProduct
+    {
+        // ==============================  Interface  ==============================
         public string Name { get; private set; }
+
         public decimal Price { get; private set; }
 
+        // ==============================  State  ==============================
+        public int? Id { get; private set; }
+
         // ==============================  Factory  ==============================
-        public Product(int? id, string name, decimal price)
+        public Product(string name, decimal price, int? id)
         {
-            Id = id;
             Name = name;
             Price = price;
+            Id = id;
         }
     }
 }

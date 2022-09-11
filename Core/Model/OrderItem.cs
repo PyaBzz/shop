@@ -4,36 +4,33 @@ using System.Threading.Tasks;
 
 namespace Core
 {
+    public interface IOrderItem
+    {
+        IProduct Product { get; }
+
+        int Quantity { get; }
+
+        decimal Price { get; }
+    }
+
     public class OrderItem : IOrderItem
     {
-        // ==============================  State  ==============================
-        public int? orderId;
-        public int? productId;
-        private IProduct product;
-        private IProductRepo productRepo;
-
-        // ==============================  Dto  ==============================
-        public class Dto
-        {
-            public int OrderId { get; set; }
-            public int Id { get; set; }
-            public int ProductId { get; set; }
-            public int Quantity { get; set; }
-        }
-
         // ==============================  Interface  ==============================
-        public int? Id { get; private set; }
-        public IProduct Product => throw new NotImplementedException(); //todo: cache product from db
+        public IProduct Product { get; private set; }
+
         public int Quantity { get; private set; }
+
         public decimal Price => Quantity * Product.Price;
 
+        // ==============================  State  ==============================
+        public int? Id { get; private set; }
+
         // ==============================  Factory  ==============================
-        public OrderItem(IProductRepo product_repo, int? order_id, int product_id, int quantity)
+        public OrderItem(IProduct prod, int qty, int? id)
         {
-            productRepo = product_repo;
-            orderId = order_id;
-            productId = product_id;
-            Quantity = quantity;
+            Product = prod;
+            Quantity = qty;
+            Id = id;
         }
     }
 
@@ -44,16 +41,10 @@ namespace Core
     //     Task<OrderItem.Dto> Get(int id);
     //     Task<OrderItem.Dto[]> GetForOrder(int orderId);
     // }
-
-    public interface IProduct
-    {
-        string Name { get; }
-        decimal Price { get; }
-    }
-
     public interface IProductRepo
     {
         Task<int> Save(Product item);
+
         Task<Product> Get(int id);
     }
 }
