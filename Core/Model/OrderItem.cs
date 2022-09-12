@@ -6,6 +6,8 @@ namespace Core
 {
     public interface IOrderItem
     {
+        int ProductId { get; }
+
         IProduct Product { get; }
 
         int Quantity { get; }
@@ -16,6 +18,15 @@ namespace Core
     public class OrderItem : IOrderItem
     {
         // ==============================  Interface  ==============================
+        public int ProductId
+        {
+            get
+            {
+                if (Product.Id.HasValue) return Product.Id.Value;
+                throw new Exception("The Product has no Id. This could result from an unpersisted Product object.");
+            }
+        }
+
         public IProduct Product { get; private set; }
 
         public int Quantity { get; private set; }

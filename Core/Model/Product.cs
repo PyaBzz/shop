@@ -4,6 +4,8 @@ namespace Core
 {
     public interface IProduct
     {
+        int? Id { get; }
+
         string Name { get; }
 
         decimal Price { get; }
@@ -12,12 +14,13 @@ namespace Core
     public class Product : IProduct
     {
         // ==============================  Interface  ==============================
+        public int? Id { get; private set; }
+
         public string Name { get; private set; }
 
         public decimal Price { get; private set; }
 
         // ==============================  State  ==============================
-        public int? Id { get; private set; }
 
         // ==============================  Factory  ==============================
         public Product(string name, decimal price, int? id)

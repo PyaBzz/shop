@@ -1,16 +1,17 @@
 using System;
-using Xunit;
 using Core;
 using Moq;
+using Xunit;
 
 namespace Test
 {
     public class Rand
     {
         public static Random rng = new Random();
+
         public static class Int
         {
-            public static int Get() => rng.Next();
+            public static int Get() => rng.Next(1000);
         }
 
         public static class Decimal
@@ -24,7 +25,8 @@ namespace Test
                 return lower + scaledRandom;
             }
 
-            private static decimal GetNormal() => rng.Next() / (decimal)int.MaxValue;
+            private static decimal GetNormal() =>
+                rng.Next() / (decimal) int.MaxValue;
         }
     }
 }
