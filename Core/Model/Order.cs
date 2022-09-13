@@ -32,7 +32,6 @@ namespace Core
         private Dictionary<int, IOrderItem> items;
 
         // ==============================  Factory  ==============================
-
         public Order()
         {
             items = new Dictionary<int, IOrderItem>();

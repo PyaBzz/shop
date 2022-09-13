@@ -24,6 +24,13 @@ namespace Test
         }
 
         [Fact]
+        public void Ctor_ByDefault_SetsNoId()
+        {
+            var sut = new Order();
+            Assert.Null(sut.Id);
+        }
+
+        [Fact]
         public void Add_WhenGivenDistinctItems_AppendsToItems()
         {
             var sut = new Order();
