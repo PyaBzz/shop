@@ -45,13 +45,6 @@ namespace Core
         }
     }
 
-    // ==============================  Required Interfaces  ==============================
-    // public interface IOrderItemRepository
-    // {
-    //     Task<int> Save(OrderItem item);
-    //     Task<OrderItem.Dto> Get(int id);
-    //     Task<OrderItem.Dto[]> GetForOrder(int orderId);
-    // }
     public interface IProductRepo
     {
         Task<int> Save(Product item);

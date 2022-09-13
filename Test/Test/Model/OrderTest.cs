@@ -50,6 +50,16 @@ namespace Test
         }
 
         [Fact]
+        public void Add_WhenGivenDuplicateItems_DoesNotAppendToItems()
+        {
+            var sut = new Order();
+            var sameProductId = aRandomId;
+            sut.Add(CreateMockItem(sameProductId));
+            sut.Add(CreateMockItem(sameProductId));
+            Assert.Equal(1, sut.Items.Length);
+        }
+
+        [Fact]
         public void Add_WhenGivenDuplicateItems_ReturnsFalse()
         {
             var sut = new Order();
@@ -57,69 +67,5 @@ namespace Test
             Assert.Equal(true, sut.Add(CreateMockItem(sameProductId)));
             Assert.Equal(false, sut.Add(CreateMockItem(sameProductId)));
         }
-
-        // [Fact]
-        // public void Add_DoesNotAddDuplicateProduct()
-        // {
-        //     var sut = GetSut();
-        //     var productId = mockedId;
-
-        //     var itemMock0 = CreateMockItem(productId);
-        //     sut.Add (itemMock0);
-        //     Assert.Equal(1, sut.Items.Length);
-
-        //     var itemMock1 = CreateMockItem(productId);
-        //     sut.Add (itemMock1);
-        //     Assert.Equal(1, sut.Items.Length);
-        // }
-
-        // [Fact]
-        // public void Add_ReturnsFalse_IfDuplicateProduct()
-        // {
-        //     var sut = GetSut();
-        //     var productId = mockedId;
-
-        //     var itemMock0 = CreateMockItem(productId);
-        //     Assert.True(sut.Add(itemMock0));
-
-        //     var itemMock1 = CreateMockItem(productId);
-        //     Assert.False(sut.Add(itemMock1));
-        // }
-
-        // [Fact]
-        // public void Amount_SumsAmountsOfItems()
-        // {
-        //     var sut = GetSut();
-        //     var amount0 = Utils.GetRandom(0, 200);
-        //     var itemMock0 = CreateMockItem(null, amount0);
-        //     sut.Add(itemMock0);
-        //     var amount1 = Utils.GetRandom(0, 200);
-        //     var itemMock1 = CreateMockItem(null, amount1);
-        //     sut.Add(itemMock1);
-        //     var total = amount0 + amount1;
-        //     Assert.Equal(total, sut.Amount);
-        // }
-        // [Fact]
-        // public async Task Submit_AssignsId()
-        // {
-        //     var sut = GetSut();
-        //     var id = mockedId;
-        //     repoMocker
-        //         .Setup(x => x.Save(It.IsAny<Order>()))
-        //         .Returns(Task.FromResult(id));
-        //     await sut.Stage(mockedRepo);
-        //     Assert.Equal(id, sut.Id);
-        // }
-
-        // [Fact]
-        // public async Task Submit_ReturnsTheAssignedId()
-        // {
-        //     var sut = GetSut();
-        //     var id = mockedId;
-        //     repoMocker
-        //         .Setup(x => x.Save(It.IsAny<Order>()))
-        //         .Returns(Task.FromResult(id));
-        //     Assert.Equal(id, await sut.Stage(mockedRepo));
-        // }
     }
 }

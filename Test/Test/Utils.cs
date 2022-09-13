@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Test
 {
-    public class Rand
+    public static class Rand
     {
         public static Random rng = new Random();
 
