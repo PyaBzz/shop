@@ -1,40 +1,46 @@
-// using System;
-// using Xunit;
-// using Core;
-// using System.Threading.Tasks;
+using System;
+using Xunit;
+using Core;
+using Moq;
+using System.Threading.Tasks;
 
-// namespace Test
-// {
-//     public class OrderFakeRepositoryTest
-//     {
-//         Random rng = new Random();
-//         private OrderFakeRepository sut = new OrderFakeRepository();
+namespace Test
+{
+    public class OrderFakeRepoTest
+    {
+        [Fact]
+        public async void Save_Saves_And_Retrieves()
+        {
+            var sut = new OrderFakeRepo();
 
-//         private Order CreateOrder(int? customerId = null)
-//         {
-//             if (customerId.HasValue)
-//                 return Order.Factory.Create(customerId.Value);
-//             else
-//                 return Order.Factory.Create(rng.Next());
-//         }
+            var original = new Order();
+            await sut.Save(original);
+            var repoData = await sut.Get();
+            var retrieved = repoData[0];
+            Assert.Equal(original, retrieved);
+        }
 
-//         [Fact]
-//         public async Task Save_AssignsId_SequentiallyAsync()
-//         {
-//             var order0 = CreateOrder();
-//             var id0 = await sut.Save(order0);
+        [Fact]
+        public async void Save_AssignsIdsIncrementally()
+        {
+            var sut = new OrderFakeRepo();
+            var id0 = await sut.Save(new Order());
+            Assert.Equal(0, id0);
+            var id1 = await sut.Save(new Order());
+            Assert.Equal(1, id1);
+        }
 
-//             var order1 = CreateOrder();
-//             var id1 = await sut.Save(order0);
+        [Fact]
+        public async void Get_GetsById()
+        {
+            var sut = new OrderFakeRepo();
+            await sut.Save(new Order());
 
-//             Assert.Equal(id1, id0 + 1);
-//         }
+            var original = new Order();
+            var id = await sut.Save(original);
+            var retrieved = await sut.Get(id);
 
-//         [Fact]
-//         public async Task Get_ReturnsNull_IfNotFoundAsync()
-//         {
-//             var item = await sut.Get(rng.Next());
-//             Assert.Null(item);
-//         }
-//     }
-// }
+            Assert.Equal(original, retrieved);
+        }
+    }
+}

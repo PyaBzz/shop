@@ -10,8 +10,6 @@ namespace Test
     {
         private int aRandomId => Rand.Int.Get();
 
-        private string productName = "A random product";
-
         private decimal aRandomPrice => Rand.Decimal.Get(1.2m, 100.7m);
 
         private int aRandomQuantity => Rand.Int.Get();

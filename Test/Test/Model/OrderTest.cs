@@ -52,8 +52,8 @@ namespace Test
         {
             var sut = new Order();
 
-            Assert.Equal(true, sut.Add(CreateMockItem()));
-            Assert.Equal(true, sut.Add(CreateMockItem()));
+            Assert.True(sut.Add(CreateMockItem()));
+            Assert.True(sut.Add(CreateMockItem()));
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Test
             var sameProductId = aRandomId;
             sut.Add(CreateMockItem(sameProductId));
             sut.Add(CreateMockItem(sameProductId));
-            Assert.Equal(1, sut.Items.Length);
+            Assert.Single(sut.Items);
         }
 
         [Fact]
@@ -71,8 +71,8 @@ namespace Test
         {
             var sut = new Order();
             var sameProductId = aRandomId;
-            Assert.Equal(true, sut.Add(CreateMockItem(sameProductId)));
-            Assert.Equal(false, sut.Add(CreateMockItem(sameProductId)));
+            Assert.True(sut.Add(CreateMockItem(sameProductId)));
+            Assert.False(sut.Add(CreateMockItem(sameProductId)));
         }
     }
 }
