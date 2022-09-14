@@ -9,7 +9,7 @@ namespace Test
     public class OrderFakeRepoTest
     {
         [Fact]
-        public async void Save_Saves_And_Retrieves()
+        public async void Save_Saves()
         {
             var sut = new OrderFakeRepo();
 
