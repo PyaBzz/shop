@@ -24,7 +24,7 @@ namespace Core
             items.Add(item.ProductId,item);
             return true;
         }
-        public decimal Amount => throw new NotImplementedException();
+        public decimal Amount => items.Values.Sum(x => x.Price);
         public async Task<int> Stage() => throw new NotImplementedException();
 
         // ==============================  State  ==============================

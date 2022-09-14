@@ -12,13 +12,17 @@ namespace Test
 
         private int aRandomQty => Rand.Int.Get();
 
-        private IOrderItem CreateMockItem(int? productId = null)
+        private decimal aRandomPrice => Rand.Decimal.Get(10, 20);
+
+        private IOrderItem
+        CreateMockItem(int? productId = null, decimal price = 0)
         {
             var mocker = new Mock<IOrderItem>();
             if (productId.HasValue)
                 mocker.SetupGet(x => x.ProductId).Returns(productId.Value);
             else
                 mocker.SetupGet(x => x.ProductId).Returns(aRandomId);
+            mocker.SetupGet(x => x.Price).Returns(price);
             mocker.SetupGet(x => x.Quantity).Returns(aRandomQty);
             return mocker.Object;
         }
@@ -73,6 +77,24 @@ namespace Test
             var sameProductId = aRandomId;
             Assert.True(sut.Add(CreateMockItem(sameProductId)));
             Assert.False(sut.Add(CreateMockItem(sameProductId)));
+        }
+
+        [Fact]
+        public void Amount_WhithoutItems_ReturnsZero()
+        {
+            var sut = new Order();
+            Assert.Equal(0, sut.Amount);
+        }
+
+        [Fact]
+        public void Amount_WhithItems_ReturnsTheirSum()
+        {
+            var sut = new Order();
+            var item1 = CreateMockItem(aRandomId, aRandomPrice);
+            sut.Add (item1);
+            var item2 = CreateMockItem(aRandomId, aRandomPrice);
+            sut.Add (item2);
+            Assert.Equal(item1.Price + item2.Price, sut.Amount);
         }
     }
 }
