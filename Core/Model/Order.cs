@@ -10,10 +10,10 @@ namespace Core
         bool Add(IOrderItem item);
         IOrderItem[] Items {get; } //todo: make it ImmutableDictionary
         decimal Price { get; }
-        Task<int> Stage();
+        Task<int> Stage(IOrderRepo repo);
     }
 
-    public class Order : IOrder
+    public class Order : Saveable, IOrder
     {
         // ==============================  Interface  ==============================
         public IOrderItem[] Items => items.Values.ToArray();
@@ -25,10 +25,15 @@ namespace Core
             return true;
         }
         public decimal Price => items.Values.Sum(x => x.Price);
-        public async Task<int> Stage() => throw new NotImplementedException();
+        public async Task<int> Stage(IOrderRepo repo)
+        {
+            var id = await repo.Save(this);
+            if(IsNew)
+                Id = id;
+            return id;
+        }
 
         // ==============================  State  ==============================
-        public int? Id { get; private set; }
         private Dictionary<int, IOrderItem> items;
 
         // ==============================  Factory  ==============================
@@ -42,5 +47,8 @@ namespace Core
             items = itmz;
             Id = id;
         }
+
+        // ==============================  Internal Logic  ==============================
+        // mostly private stuff
     }
 }

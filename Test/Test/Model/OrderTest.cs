@@ -27,6 +27,20 @@ namespace Test
             return mocker.Object;
         }
 
+        private IOrderRepo CreateMockRepo(int? orderId)
+        {
+            var mocker = new Mock<IOrderRepo>();
+            if (orderId.HasValue)
+                mocker
+                    .Setup(x => x.Save(It.IsAny<Order>()))
+                    .Returns(Task.FromResult(orderId.Value));
+            else
+                mocker
+                    .Setup(x => x.Save(It.IsAny<Order>()))
+                    .Returns(Task.FromResult(aRandomId));
+            return mocker.Object;
+        }
+
         [Fact]
         public void Ctor_ByDefault_SetsNoId()
         {
@@ -95,6 +109,27 @@ namespace Test
             var item2 = CreateMockItem(aRandomId, aRandomPrice);
             sut.Add (item2);
             Assert.Equal(item1.Price + item2.Price, sut.Price);
+        }
+
+        [Fact]
+        public async void Stage_WhithNewOrder_ReturnsId()
+        {
+            var sut = new Order();
+            var expectedId = aRandomId;
+            var repo = CreateMockRepo(expectedId);
+            var actualId = await sut.Stage(repo);
+            Assert.Equal (expectedId, actualId);
+        }
+
+        [Fact]
+        public async void Stage_WhithNewOrder_SetsId()
+        {
+            var sut = new Order();
+            var expectedId = aRandomId;
+            var repo = CreateMockRepo(expectedId);
+            await sut.Stage(repo);
+            var actualId = sut.Id;
+            Assert.Equal (expectedId, actualId);
         }
     }
 }
