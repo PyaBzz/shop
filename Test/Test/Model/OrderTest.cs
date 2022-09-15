@@ -80,21 +80,21 @@ namespace Test
         }
 
         [Fact]
-        public void Amount_WhithoutItems_ReturnsZero()
+        public void Price_WhithoutItems_ReturnsZero()
         {
             var sut = new Order();
-            Assert.Equal(0, sut.Amount);
+            Assert.Equal(0, sut.Price);
         }
 
         [Fact]
-        public void Amount_WhithItems_ReturnsTheirSum()
+        public void Price_WhithItems_ReturnsTheirSum()
         {
             var sut = new Order();
             var item1 = CreateMockItem(aRandomId, aRandomPrice);
             sut.Add (item1);
             var item2 = CreateMockItem(aRandomId, aRandomPrice);
             sut.Add (item2);
-            Assert.Equal(item1.Price + item2.Price, sut.Amount);
+            Assert.Equal(item1.Price + item2.Price, sut.Price);
         }
     }
 }

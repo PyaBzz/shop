@@ -9,7 +9,7 @@ namespace Core
     {
         bool Add(IOrderItem item);
         IOrderItem[] Items {get; } //todo: make it ImmutableDictionary
-        decimal Amount { get; }
+        decimal Price { get; }
         Task<int> Stage();
     }
 
@@ -24,7 +24,7 @@ namespace Core
             items.Add(item.ProductId,item);
             return true;
         }
-        public decimal Amount => items.Values.Sum(x => x.Price);
+        public decimal Price => items.Values.Sum(x => x.Price);
         public async Task<int> Stage() => throw new NotImplementedException();
 
         // ==============================  State  ==============================
