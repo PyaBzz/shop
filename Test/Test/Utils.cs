@@ -7,14 +7,21 @@ namespace Test
 {
     public static class Rand
     {
-        public static Random rng = new Random();
+        public static int AnId => Int.Get();
 
-        public static class Int
+        public static int AQuantity => Int.Get();
+
+        public static decimal APrice => Decimal.Get(10, 20);
+
+        // ==============================  Internal Logic  ==============================
+        private static Random rng = new Random();
+
+        private static class Int
         {
             public static int Get() => rng.Next(1000);
         }
 
-        public static class Decimal
+        private static class Decimal
         {
             public static decimal Get(decimal upper) => Get(0, upper);
 

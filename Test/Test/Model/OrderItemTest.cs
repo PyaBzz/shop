@@ -8,12 +8,6 @@ namespace Test
 {
     public class OrderItemTest
     {
-        private int aRandomId => Rand.Int.Get();
-
-        private decimal aRandomPrice => Rand.Decimal.Get(1.2m, 100.7m);
-
-        private int aRandomQuantity => Rand.Int.Get();
-
         private Mock<IProduct> productMocker = new Mock<IProduct>();
 
         private IProduct productMock => productMocker.Object;
@@ -21,8 +15,8 @@ namespace Test
         [Fact]
         public void Price_MultipliesUnitPriceByQuantity()
         {
-            var price = aRandomPrice;
-            var quantity = aRandomQuantity;
+            var price = Rand.APrice;
+            var quantity = Rand.AQuantity;
             productMocker.SetupGet(x => x.Price).Returns(price);
             var sut = new OrderItem(productMock, quantity, null);
 
