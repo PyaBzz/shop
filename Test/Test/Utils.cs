@@ -11,7 +11,7 @@ namespace Test
 
         public static int AQuantity => Int.Get();
 
-        public static decimal APrice => Decimal.Get(10, 20);
+        public static decimal APrice => Decimal.Get(1.2m, 100.7m);
 
         // ==============================  Internal Logic  ==============================
         private static Random rng = new Random();
