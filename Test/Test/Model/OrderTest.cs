@@ -8,39 +8,6 @@ namespace Test
 {
     public class OrderTest
     {
-        private int aRandomId => Rand.Int.Get();
-
-        private int aRandomQty => Rand.Int.Get();
-
-        private decimal aRandomPrice => Rand.Decimal.Get(10, 20);
-
-        private IOrderItem
-        CreateMockItem(int? productId = null, decimal price = 0)
-        {
-            var mocker = new Mock<IOrderItem>();
-            if (productId.HasValue)
-                mocker.SetupGet(x => x.ProductId).Returns(productId.Value);
-            else
-                mocker.SetupGet(x => x.ProductId).Returns(aRandomId);
-            mocker.SetupGet(x => x.Price).Returns(price);
-            mocker.SetupGet(x => x.Quantity).Returns(aRandomQty);
-            return mocker.Object;
-        }
-
-        private IOrderRepo CreateMockRepo(int? orderId)
-        {
-            var mocker = new Mock<IOrderRepo>();
-            if (orderId.HasValue)
-                mocker
-                    .Setup(x => x.Save(It.IsAny<Order>()))
-                    .Returns(Task.FromResult(orderId.Value));
-            else
-                mocker
-                    .Setup(x => x.Save(It.IsAny<Order>()))
-                    .Returns(Task.FromResult(aRandomId));
-            return mocker.Object;
-        }
-
         [Fact]
         public void Ctor_ByDefault_SetsNoId()
         {
@@ -53,10 +20,10 @@ namespace Test
         {
             var sut = new Order();
 
-            var item1 = CreateMockItem();
+            var item1 = Mocker.MakeItem();
             sut.Add (item1);
 
-            var item2 = CreateMockItem();
+            var item2 = Mocker.MakeItem();
             sut.Add (item2);
 
             Assert
@@ -70,17 +37,17 @@ namespace Test
         {
             var sut = new Order();
 
-            Assert.True(sut.Add(CreateMockItem()));
-            Assert.True(sut.Add(CreateMockItem()));
+            Assert.True(sut.Add(Mocker.MakeItem()));
+            Assert.True(sut.Add(Mocker.MakeItem()));
         }
 
         [Fact]
         public void Add_WhenGivenDuplicateItems_DoesNotAppendToItems()
         {
             var sut = new Order();
-            var sameProductId = aRandomId;
-            sut.Add(CreateMockItem(sameProductId));
-            sut.Add(CreateMockItem(sameProductId));
+            var sameProductId = Mocker.anId;
+            sut.Add(Mocker.MakeItem(sameProductId));
+            sut.Add(Mocker.MakeItem(sameProductId));
             Assert.Single(sut.Items);
         }
 
@@ -88,9 +55,9 @@ namespace Test
         public void Add_WhenGivenDuplicateItems_ReturnsFalse()
         {
             var sut = new Order();
-            var sameProductId = aRandomId;
-            Assert.True(sut.Add(CreateMockItem(sameProductId)));
-            Assert.False(sut.Add(CreateMockItem(sameProductId)));
+            var sameProductId = Mocker.anId;
+            Assert.True(sut.Add(Mocker.MakeItem(sameProductId)));
+            Assert.False(sut.Add(Mocker.MakeItem(sameProductId)));
         }
 
         [Fact]
@@ -104,9 +71,9 @@ namespace Test
         public void Price_WhithItems_ReturnsTheirSum()
         {
             var sut = new Order();
-            var item1 = CreateMockItem(aRandomId, aRandomPrice);
+            var item1 = Mocker.MakeItem(Mocker.anId, Mocker.aPrice);
             sut.Add (item1);
-            var item2 = CreateMockItem(aRandomId, aRandomPrice);
+            var item2 = Mocker.MakeItem(Mocker.anId, Mocker.aPrice);
             sut.Add (item2);
             Assert.Equal(item1.Price + item2.Price, sut.Price);
         }
@@ -115,8 +82,8 @@ namespace Test
         public async void Stage_WhithNewOrder_ReturnsId()
         {
             var sut = new Order();
-            var expectedId = aRandomId;
-            var repo = CreateMockRepo(expectedId);
+            var expectedId = Mocker.anId;
+            var repo = Mocker.MakeRepo(expectedId);
             var actualId = await sut.Stage(repo);
             Assert.Equal (expectedId, actualId);
         }
@@ -125,11 +92,53 @@ namespace Test
         public async void Stage_WhithNewOrder_SetsId()
         {
             var sut = new Order();
-            var expectedId = aRandomId;
-            var repo = CreateMockRepo(expectedId);
+            var expectedId = Mocker.anId;
+            var repo = Mocker.MakeRepo(expectedId);
             await sut.Stage(repo);
             var actualId = sut.Id;
             Assert.Equal (expectedId, actualId);
+        }
+
+        private static class Mocker
+        {
+            public static int anId => Rand.Int.Get();
+
+            public static int aQuantity => Rand.Int.Get();
+
+            public static decimal aPrice => Rand.Decimal.Get(10, 20);
+
+            private static readonly Mock<IOrderItem>
+                itemMocker = new Mock<IOrderItem>();
+
+            private static readonly Mock<IOrderRepo>
+                repoMocker = new Mock<IOrderRepo>();
+
+            public static IOrderItem
+            MakeItem(int? productId = null, decimal price = 0)
+            {
+                if (productId.HasValue)
+                    itemMocker
+                        .SetupGet(x => x.ProductId)
+                        .Returns(productId.Value);
+                else
+                    itemMocker.SetupGet(x => x.ProductId).Returns(Mocker.anId);
+                itemMocker.SetupGet(x => x.Price).Returns(price);
+                itemMocker.SetupGet(x => x.Quantity).Returns(Mocker.aQuantity);
+                return itemMocker.Object;
+            }
+
+            public static IOrderRepo MakeRepo(int? orderId)
+            {
+                if (orderId.HasValue)
+                    repoMocker
+                        .Setup(x => x.Save(It.IsAny<Order>()))
+                        .Returns(Task.FromResult(orderId.Value));
+                else
+                    repoMocker
+                        .Setup(x => x.Save(It.IsAny<Order>()))
+                        .Returns(Task.FromResult(Mocker.anId));
+                return repoMocker.Object;
+            }
         }
     }
 }
