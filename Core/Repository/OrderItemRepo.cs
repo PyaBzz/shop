@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Core
 {
-    // public class OrderItemRepository : IOrderItemRepository
-    // {
-    //     // ==============================  State  ==============================
+    public interface IOrderItemRepo
+    {
+        Task<IEnumerable<int>> Save(IEnumerable<OrderItem> items);
+        Task<IEnumerable<OrderItem>> Get(int orderId);
+    }
 
-    //     // ==============================  Interface  ==============================
-    //     public async Task<int> Save(OrderItem item) => throw new NotImplementedException();
-    //     public async Task<OrderItem.Dto> Get(int id) => throw new NotImplementedException();
-    //     public async Task<OrderItem.Dto[]> GetForOrder(int orderId) => throw new NotImplementedException();
-    // }
+    public class OrderItemFakeRepo : IOrderItemRepo
+    {
+        // ==============================  Interface  ==============================
+        public Task<IEnumerable<int>> Save(IEnumerable<OrderItem> items)
+            => throw new NotImplementedException();
+        public Task<IEnumerable<OrderItem>> Get(int orderId)
+            => throw new NotImplementedException();
+    }
 }

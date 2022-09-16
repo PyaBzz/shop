@@ -7,6 +7,7 @@ namespace Test
 {
     public static class Rand
     {
+        // ==============================  Interface  ==============================
         public static int AnId => Int.Get();
 
         public static int AQuantity => Int.Get();
