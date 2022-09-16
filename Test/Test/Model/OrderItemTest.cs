@@ -15,8 +15,8 @@ namespace Test
         [Fact]
         public void Price_MultipliesUnitPriceByQuantity()
         {
-            var price = Rand.APrice;
-            var quantity = Rand.AQuantity;
+            var price = Randomiser.APrice;
+            var quantity = Randomiser.AQuantity;
             productMocker.SetupGet(x => x.Price).Returns(price);
             var sut = new OrderItem(productMock, quantity, null);
 

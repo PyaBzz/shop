@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Test
 {
-    public static class Rand
+    public static class Randomiser
     {
         // ==============================  Interface  ==============================
         public static int AnId => Int.Get();
