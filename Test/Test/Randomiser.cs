@@ -34,7 +34,7 @@ namespace Test
             }
 
             private static decimal GetNormal() =>
-                rng.Next() / (decimal) int.MaxValue;
+                rng.Next() / (decimal)int.MaxValue;
         }
     }
 }

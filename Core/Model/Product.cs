@@ -5,9 +5,7 @@ namespace Core
     public interface IProduct
     {
         int? Id { get; }
-
         string Name { get; }
-
         decimal Price { get; }
     }
 
@@ -15,9 +13,7 @@ namespace Core
     {
         // ==============================  Interface  ==============================
         public int? Id { get; private set; }
-
         public string Name { get; private set; }
-
         public decimal Price { get; private set; }
 
         // ==============================  State  ==============================

@@ -7,11 +7,8 @@ namespace Core
     public interface IOrderItem
     {
         int ProductId { get; }
-
         IProduct Product { get; }
-
         int Quantity { get; }
-
         decimal Price { get; }
     }
 
@@ -48,7 +45,6 @@ namespace Core
     public interface IProductRepo
     {
         Task<int> Save(Product item);
-
         Task<Product> Get(int id);
     }
 }

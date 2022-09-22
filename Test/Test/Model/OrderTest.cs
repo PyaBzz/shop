@@ -21,10 +21,10 @@ namespace Test
             var sut = new Order();
 
             var item1 = Mocker.MakeItem();
-            sut.Add (item1);
+            sut.Add(item1);
 
             var item2 = Mocker.MakeItem();
-            sut.Add (item2);
+            sut.Add(item2);
 
             Assert
                 .Collection(sut.Items,
@@ -72,9 +72,9 @@ namespace Test
         {
             var sut = new Order();
             var item1 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
-            sut.Add (item1);
+            sut.Add(item1);
             var item2 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
-            sut.Add (item2);
+            sut.Add(item2);
             Assert.Equal(item1.Price + item2.Price, sut.Price);
         }
 
@@ -85,7 +85,7 @@ namespace Test
             var expectedId = Randomiser.AnId;
             var repo = Mocker.MakeRepo(expectedId);
             var actualId = await sut.Stage(repo);
-            Assert.Equal (expectedId, actualId);
+            Assert.Equal(expectedId, actualId);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace Test
             var repo = Mocker.MakeRepo(expectedId);
             await sut.Stage(repo);
             var actualId = sut.Id;
-            Assert.Equal (expectedId, actualId);
+            Assert.Equal(expectedId, actualId);
         }
 
         private static class Mocker

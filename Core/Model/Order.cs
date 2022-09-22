@@ -8,7 +8,7 @@ namespace Core
     public interface IOrder
     {
         bool Add(IOrderItem item);
-        IOrderItem[] Items {get; } //todo: make it ImmutableDictionary
+        IOrderItem[] Items { get; } //todo: make it ImmutableDictionary
         decimal Price { get; }
         Task<int> Stage(IOrderRepo repo);
     }
@@ -19,16 +19,16 @@ namespace Core
         public IOrderItem[] Items => items.Values.ToArray();
         public bool Add(IOrderItem item)
         {
-            if(items.ContainsKey(item.ProductId))
-            return false;
-            items.Add(item.ProductId,item);
+            if (items.ContainsKey(item.ProductId))
+                return false;
+            items.Add(item.ProductId, item);
             return true;
         }
         public decimal Price => items.Values.Sum(x => x.Price);
         public async Task<int> Stage(IOrderRepo repo)
         {
             var id = await repo.Save(this);
-            if(IsNew)
+            if (IsNew)
                 Id = id;
             return id;
         }
