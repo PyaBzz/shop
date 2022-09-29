@@ -2,17 +2,24 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Core
 {
     public class OrderFakeRepo : IOrderRepo
     {
-        private readonly Dictionary<int, Order> data = new Dictionary<int, Order>();
+        private readonly ConcurrentDictionary<int, Order> data = new ConcurrentDictionary<int, Order>();
 
         public Task<int> Save(Order x)
         {
-            var nextId = data.Count;
-            data.Add(nextId, x);
+            int nextId;
+            var isSuccess = false;
+            do
+            {
+                nextId = data.Count;
+                isSuccess = data.TryAdd(nextId, x);
+            }
+            while (isSuccess == false);
             return Task.FromResult(nextId);
         }
 
