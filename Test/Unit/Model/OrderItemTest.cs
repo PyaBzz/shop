@@ -4,7 +4,7 @@ using Core;
 using Moq;
 using Xunit;
 
-namespace Test
+namespace Unit
 {
     public class OrderItemTest
     {

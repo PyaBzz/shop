@@ -4,7 +4,7 @@ using Core;
 using Moq;
 using System.Threading.Tasks;
 
-namespace Test
+namespace Unit
 {
     public class OrderFakeRepoTest
     {
