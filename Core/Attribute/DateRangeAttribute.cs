@@ -10,14 +10,14 @@ namespace Core
 
         public DateRangeAttribute(string to = null, string from = null)
         {
-            toDate = to == null ? DateTime.UtcNow : DateTime.Parse(to);
-            fromDate = from == null ? DateTime.MinValue : DateTime.Parse(from);
+            toDate = to is null ? DateTime.UtcNow : DateTime.Parse(to);
+            fromDate = from is null ? DateTime.MinValue : DateTime.Parse(from);
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             bool isValid = true;
-            if (value == null) isValid = false;
+            if (value is null) isValid = false;
             if (value is DateTime == false) isValid = false;
             var date = (DateTime)value;
             if (date > toDate)
