@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Core;
 using Moq;
+using Test;
 using Xunit;
 
 namespace Unit
@@ -15,8 +16,8 @@ namespace Unit
         [Fact]
         public void Price_MultipliesUnitPriceByQuantity()
         {
-            var price = Test.Randomiser.APrice;
-            var quantity = Test.Randomiser.AQuantity;
+            var price = Randomiser.APrice;
+            var quantity = Randomiser.AQuantity;
             productMocker.SetupGet(x => x.Price).Returns(price);
             var sut = new OrderItem(productMock, quantity, null);
 
