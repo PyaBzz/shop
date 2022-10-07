@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Unit
 {
-    public class OrderFakeRepoTest
+    public class OrderFakeRepo_
     {
         [Fact]
         public async void Save_Saves()

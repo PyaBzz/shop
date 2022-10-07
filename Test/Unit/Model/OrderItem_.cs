@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Unit
 {
-    public class OrderItemTest
+    public class OrderItem_
     {
         private Mock<IProduct> productMocker = new Mock<IProduct>();
 
@@ -15,8 +15,8 @@ namespace Unit
         [Fact]
         public void Price_MultipliesUnitPriceByQuantity()
         {
-            var price = Randomiser.APrice;
-            var quantity = Randomiser.AQuantity;
+            var price = Test.Randomiser.APrice;
+            var quantity = Test.Randomiser.AQuantity;
             productMocker.SetupGet(x => x.Price).Returns(price);
             var sut = new OrderItem(productMock, quantity, null);
 

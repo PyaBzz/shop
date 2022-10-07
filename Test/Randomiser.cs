@@ -3,9 +3,9 @@ using Core;
 using Moq;
 using Xunit;
 
-namespace Unit
+namespace Test
 {
-    public static class Randomiser //todo: Take out of Unit into Test
+    public static class Randomiser
     {
         // ==============================  Interface  ==============================
         public static int AnId => Int.Get();

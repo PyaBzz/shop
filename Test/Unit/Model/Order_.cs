@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Unit
 {
-    public class OrderTest
+    public class Order_
     {
         [Fact]
         public void Ctor_ByDefault_SetsNoId()
@@ -45,7 +45,7 @@ namespace Unit
         public void Add_WhenGivenDuplicateItems_DoesNotAppendToItems()
         {
             var sut = new Order();
-            var sameProductId = Randomiser.AnId;
+            var sameProductId = Test.Randomiser.AnId;
             sut.Add(Mocker.MakeItem(sameProductId));
             sut.Add(Mocker.MakeItem(sameProductId));
             Assert.Single(sut.Items);
@@ -55,7 +55,7 @@ namespace Unit
         public void Add_WhenGivenDuplicateItems_ReturnsFalse()
         {
             var sut = new Order();
-            var sameProductId = Randomiser.AnId;
+            var sameProductId = Test.Randomiser.AnId;
             Assert.True(sut.Add(Mocker.MakeItem(sameProductId)));
             Assert.False(sut.Add(Mocker.MakeItem(sameProductId)));
         }
@@ -71,9 +71,9 @@ namespace Unit
         public void Price_WhithItems_ReturnsTheirSum()
         {
             var sut = new Order();
-            var item1 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
+            var item1 = Mocker.MakeItem(Test.Randomiser.AnId, Test.Randomiser.APrice);
             sut.Add(item1);
-            var item2 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
+            var item2 = Mocker.MakeItem(Test.Randomiser.AnId, Test.Randomiser.APrice);
             sut.Add(item2);
             Assert.Equal(item1.Price + item2.Price, sut.Price);
         }
@@ -82,7 +82,7 @@ namespace Unit
         public async void Stage_WhithNewOrder_ReturnsId()
         {
             var sut = new Order();
-            var expectedId = Randomiser.AnId;
+            var expectedId = Test.Randomiser.AnId;
             var repo = Mocker.MakeRepo(expectedId);
             var actualId = await sut.Stage(repo);
             Assert.Equal(expectedId, actualId);
@@ -92,7 +92,7 @@ namespace Unit
         public async void Stage_WhithNewOrder_SetsId()
         {
             var sut = new Order();
-            var expectedId = Randomiser.AnId;
+            var expectedId = Test.Randomiser.AnId;
             var repo = Mocker.MakeRepo(expectedId);
             await sut.Stage(repo);
             var actualId = sut.Id;
@@ -115,9 +115,9 @@ namespace Unit
                         .SetupGet(x => x.ProductId)
                         .Returns(productId.Value);
                 else
-                    itemMocker.SetupGet(x => x.ProductId).Returns(Randomiser.AnId);
+                    itemMocker.SetupGet(x => x.ProductId).Returns(Test.Randomiser.AnId);
                 itemMocker.SetupGet(x => x.Price).Returns(price);
-                itemMocker.SetupGet(x => x.Quantity).Returns(Randomiser.AQuantity);
+                itemMocker.SetupGet(x => x.Quantity).Returns(Test.Randomiser.AQuantity);
                 return itemMocker.Object;
             }
 
@@ -130,7 +130,7 @@ namespace Unit
                 else
                     repoMocker
                         .Setup(x => x.Save(It.IsAny<Order>()))
-                        .Returns(Task.FromResult(Randomiser.AnId));
+                        .Returns(Task.FromResult(Test.Randomiser.AnId));
                 return repoMocker.Object;
             }
         }

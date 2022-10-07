@@ -4,24 +4,24 @@ using Xunit;
 
 namespace Unit
 {
-    public class Product_ReleaseDate : Product_Test
+    public class Product_ReleaseDate : Product_
     {
         [Fact]
-        public void WhenPublishedTomorrow_IsInvalid()
+        public void WhenReleasedTomorrow_IsInvalid()
         {
             Product sut = new Product(dummyName, Randomiser.APrice, tomorrow);
             ModelStateTester.Do(sut, false);
         }
 
         [Fact]
-        public void WhenPublishedInvalid_GivesTheRightValidationMessage()
+        public void WhenReleasedInvalid_GivesTheRightValidationMessage()
         {
             Product sut = new Product(dummyName, Randomiser.APrice, tomorrow);
             ModelStateTester.Do(sut, false, Message.invalid_release_date);
         }
 
         [Fact]
-        public void WhenPublishedYesterday_IsValid()
+        public void WhenReleasedYesterday_IsValid()
         {
             Product sut = new Product(dummyName, Randomiser.APrice, yesterday);
             ModelStateTester.Do(sut, true);
