@@ -4,25 +4,29 @@ namespace Core
 {
     public interface IProduct
     {
-        int? Id { get; }
-        string Name { get; }
-        decimal Price { get; }
+        int? Id { get; set; }
+        string Name { get; set; }
+        decimal Price { get; set; }
+        DateTime ReleaseDate { get; set; }
     }
 
     public class Product : IProduct
     {
         // ==============================  Interface  ==============================
-        public int? Id { get; private set; }
-        public string Name { get; private set; }
-        public decimal Price { get; private set; }
+        public int? Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        [DateRange]
+        public DateTime ReleaseDate { get; set; }
 
         // ==============================  State  ==============================
 
         // ==============================  Factory  ==============================
-        public Product(string name, decimal price, int? id)
+        public Product(string name, decimal price, DateTime releaseDate, int? id = default)
         {
             Name = name;
             Price = price;
+            ReleaseDate = releaseDate;
             Id = id;
         }
     }
