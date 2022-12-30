@@ -18,7 +18,7 @@ namespace Core
         [Required]
         public string Name { get; set; }
         public decimal Price { get; set; }
-        [DateRange]
+        [PastDate]
         public DateTime ReleaseDate { get; set; }
 
         // ==============================  State  ==============================

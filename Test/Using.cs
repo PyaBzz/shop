@@ -8,3 +8,5 @@ global using Moq;
 
 global using Core;
 global using Test;
+global using Baz;
+global using Baz.Services;
