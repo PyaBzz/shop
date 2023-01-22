@@ -2,17 +2,19 @@ namespace Unit;
 
 public class Order_
 {
+    private static Order MakeSut() => new(Mocker.MakeRepo());
+
     [Fact]
     public void Ctor_ByDefault_SetsNoId()
     {
-        var sut = new Order();
+        var sut = MakeSut();
         Assert.Null(sut.Id);
     }
 
     [Fact]
     public void Add_WhenGivenDistinctItems_AppendsToItems()
     {
-        var sut = new Order();
+        var sut = MakeSut();
 
         var item1 = Mocker.MakeItem();
         sut.Add(item1);
@@ -29,7 +31,7 @@ public class Order_
     [Fact]
     public void Add_WhenGivenDistinctItems_ReturnsTrue()
     {
-        var sut = new Order();
+        var sut = MakeSut();
 
         Assert.True(sut.Add(Mocker.MakeItem()));
         Assert.True(sut.Add(Mocker.MakeItem()));
@@ -38,7 +40,7 @@ public class Order_
     [Fact]
     public void Add_WhenGivenDuplicateItems_DoesNotAppendToItems()
     {
-        var sut = new Order();
+        var sut = MakeSut();
         var sameProductId = Randomiser.AnId;
         sut.Add(Mocker.MakeItem(sameProductId));
         sut.Add(Mocker.MakeItem(sameProductId));
@@ -48,7 +50,7 @@ public class Order_
     [Fact]
     public void Add_WhenGivenDuplicateItems_ReturnsFalse()
     {
-        var sut = new Order();
+        var sut = MakeSut();
         var sameProductId = Randomiser.AnId;
         Assert.True(sut.Add(Mocker.MakeItem(sameProductId)));
         Assert.False(sut.Add(Mocker.MakeItem(sameProductId)));
@@ -57,14 +59,14 @@ public class Order_
     [Fact]
     public void Price_WhithoutItems_ReturnsZero()
     {
-        var sut = new Order();
+        var sut = MakeSut();
         Assert.Equal(0, sut.Price);
     }
 
     [Fact]
     public void Price_WhithItems_ReturnsTheirSum()
     {
-        var sut = new Order();
+        var sut = MakeSut();
         var item1 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
         sut.Add(item1);
         var item2 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
@@ -75,20 +77,20 @@ public class Order_
     [Fact]
     public async void Stage_WhithNewOrder_ReturnsId()
     {
-        var sut = new Order();
+        var sut = MakeSut();
         var expectedId = Randomiser.AnId;
         var repo = Mocker.MakeRepo(expectedId);
-        var actualId = await sut.Stage(repo);
+        var actualId = await sut.Stage();
         Assert.Equal(expectedId, actualId);
     }
 
     [Fact]
     public async void Stage_WhithNewOrder_SetsId()
     {
-        var sut = new Order();
+        var sut = MakeSut();
         var expectedId = Randomiser.AnId;
         var repo = Mocker.MakeRepo(expectedId);
-        await sut.Stage(repo);
+        await sut.Stage();
         var actualId = sut.Id;
         Assert.Equal(expectedId, actualId);
     }
@@ -115,7 +117,7 @@ public class Order_
             return itemMocker.Object;
         }
 
-        public static IOrderRepo MakeRepo(int? orderId)
+        public static IOrderRepo MakeRepo(int? orderId = null)
         {
             if (orderId.HasValue)
                 repoMocker

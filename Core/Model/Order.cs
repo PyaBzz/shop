@@ -5,7 +5,7 @@
         bool Add(IOrderItem item);
         IOrderItem[] Items { get; } //todo: make it ImmutableDictionary
         decimal Price { get; }
-        Task<int> Stage(IOrderRepo repo);
+        Task<int> Stage();
     }
 
     public class Order : Saveable, IOrder
@@ -20,7 +20,7 @@
             return true;
         }
         public decimal Price => items.Values.Sum(x => x.Price);
-        public async Task<int> Stage(IOrderRepo repo)
+        public async Task<int> Stage()
         {
             var id = await repo.Save(this);
             if (IsNew)
@@ -30,11 +30,13 @@
 
         // ==============================  State  ==============================
         private Dictionary<int, IOrderItem> items;
+        private IOrderRepo repo;
 
         // ==============================  Factory  ==============================
-        public Order()
+        public Order(IOrderRepo r)
         {
             items = new Dictionary<int, IOrderItem>();
+            repo = r;
         }
 
         public Order(Dictionary<int, IOrderItem> itmz, int? id)
