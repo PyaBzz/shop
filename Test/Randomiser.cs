@@ -3,6 +3,7 @@ namespace Test;
 public static class Randomiser
 {
     // ==============================  Interface  ==============================
+
     public static int AnId => Int.Get();
 
     public static int AQuantity => Int.Get();
@@ -10,6 +11,7 @@ public static class Randomiser
     public static decimal APrice => Decimal.Get(1.2m, 100.7m);
 
     // ==============================  Internal Logic  ==============================
+
     private static Random rng = new Random();
 
     private static class Int

@@ -11,6 +11,7 @@
     public class OrderItem : IOrderItem
     {
         // ==============================  Interface  ==============================
+
         public int ProductId
         {
             get
@@ -27,9 +28,11 @@
         public decimal Price => Quantity * Product.Price;
 
         // ==============================  State  ==============================
+
         public int? Id { get; private set; }
 
         // ==============================  Factory  ==============================
+
         public OrderItem(IProduct prod, int qty, int? id)
         {
             Product = prod;
