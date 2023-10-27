@@ -10,3 +10,4 @@ global using Core;
 global using Test;
 global using Baz;
 global using Baz.Services;
+global using Baz.Util;
