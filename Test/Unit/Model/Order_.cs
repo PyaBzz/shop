@@ -24,8 +24,8 @@ public class Order_
 
         Assert
             .Collection(sut.Items,
-            x => Assert.Equal(item1, x),
-            x => Assert.Equal(item2, x));
+            x => Assert.Equal(item1, x.Value),
+            x => Assert.Equal(item2, x.Value));
     }
 
     [Fact]

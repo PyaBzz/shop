@@ -1,9 +1,11 @@
-﻿namespace Core
+﻿using System.Collections.Immutable;
+
+namespace Core
 {
     public interface IOrder
     {
         bool Add(IOrderItem item);
-        IOrderItem[] Items { get; } //todo: make it ImmutableDictionary
+        ImmutableDictionary<int, IOrderItem> Items { get; }
         decimal Price { get; }
         Task<int> Stage();
     }
@@ -12,7 +14,8 @@
     {
         // ==============================  Interface  ==============================
 
-        public IOrderItem[] Items => items.Values.ToArray();
+        public ImmutableDictionary<int, IOrderItem> Items
+            => items.ToImmutableDictionary();
 
         public bool Add(IOrderItem item)
         {
