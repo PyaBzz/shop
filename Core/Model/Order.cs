@@ -35,6 +35,8 @@ namespace Core
             return id;
         }
 
+        public override bool IsValid => throw new NotImplementedException();
+
         // ==============================  State  ==============================
 
         private Dictionary<int, IOrderItem> items;

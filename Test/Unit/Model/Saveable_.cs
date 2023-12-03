@@ -6,6 +6,7 @@ public class Saveable_
     {
         public SUT() { }
         public SUT(int id) => Id = id;
+        public override bool IsValid => throw new NotImplementedException();
     }
 
     [Fact]
