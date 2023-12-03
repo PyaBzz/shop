@@ -1,12 +1,12 @@
 namespace Unit;
 
-public class Saveable2_
+public class SaveableExperiment_
 {
     private static readonly Mock<IRepository> repoMocker = new();
     private static readonly IRepository repo = repoMocker.Object;
     private static SUT sut;
 
-    public Saveable2_()
+    public SaveableExperiment_()
     {
         repoMocker
             .Setup(x => x.Store(It.IsAny<SUT>()))
@@ -72,7 +72,7 @@ public class Saveable2_
         Assert.Equal(expectedId, actualId);
     }
 
-    private class SUT : Saveable2
+    private class SUT : SaveableExperiment
     {
         public SUT(IRepository repo) : base(repo) { }
 

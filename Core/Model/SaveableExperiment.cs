@@ -1,16 +1,16 @@
 namespace Core;
 
-public interface IRepository //todo: Should this be generic?
+public interface IRepository
 {
-    Task<int> Store(object x);
+    Task<int> Store(object x); //unspecified type causes problem down the inheritance tree
     Task<object> Get(int id);
 }
 
-public abstract class Saveable2
+public abstract class SaveableExperiment
 {
     private IRepository repo;
 
-    public Saveable2(IRepository r)
+    public SaveableExperiment(IRepository r)
         => repo = r;
 
     public int? Id { get; protected set; }
