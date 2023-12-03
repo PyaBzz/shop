@@ -16,7 +16,7 @@
         {
             get
             {
-                if (Product.Id.HasValue) return Product.Id.Value;
+                if (Product.Id.HasValue) return Product.Id.Value;  //todo: use IsNew from the Product object
                 throw new Exception("The Product has no Id. This could result from an unpersisted Product object.");
             }
         }
