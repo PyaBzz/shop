@@ -22,8 +22,8 @@ public abstract class Saveable2
     /// <returns></returns>
     public async Task<int> Save()
     {
-        if (Validate() == false)
-            throw new InvalidOperationException($"The object of type {this.GetType().Name} failed state validation prior to saving");
+        if (IsValid is false)
+            throw new InvalidOperationException($"The object of type {GetType().Name} failed state validation prior to saving");
         var id = await repo.Store(this);
         if (IsNew)
             Id = id;
@@ -34,7 +34,7 @@ public abstract class Saveable2
     /// Validates the state of this object from a business perspective
     /// </summary>
     /// <returns></returns>
-    public abstract bool Validate();
+    public abstract bool IsValid { get; }
 
     /// <summary>
     /// Stores the object in a data store e.g an SQL database

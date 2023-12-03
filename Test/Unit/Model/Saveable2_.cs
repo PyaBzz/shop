@@ -6,18 +6,11 @@ public class Saveable2_
     {
         public SUT(IRepository repo) : base(repo) { }
 
-        public SUT(IRepository repo, int? id = null, bool validity = false) : this(repo)
-        {
-            Id = id;
-            isValid = validity;
-        }
+        public SUT(IRepository repo, int? id = null) : this(repo) => Id = id;
 
-        public override bool Validate()
-        {
-            return isValid;
-        }
+        public override bool IsValid => Validity;
 
-        private bool isValid;
+        public bool Validity { get; set; }
     }
 
     [Fact]
@@ -42,11 +35,11 @@ public class Saveable2_
     }
 
     [Fact]
-    public async void Save_ReturnsId()
+    public async void Save_ReturnsIdFromRepo()
     {
         var expectedId = Randomiser.AnId;
         var repo = Mocker.MakeRepo(expectedId);
-        SUT sut = new(repo, validity: true);
+        SUT sut = new(repo) { Validity = true };
         var actualId = await sut.Save();
         Assert.Equal(expectedId, actualId);
     }
@@ -56,7 +49,19 @@ public class Saveable2_
     {
         var expectedId = Randomiser.AnId;
         var repo = Mocker.MakeRepo(expectedId);
-        SUT sut = new(repo, validity: true);
+        SUT sut = new(repo) { Validity = true };
+        await sut.Save();
+        var actualId = sut.Id;
+        Assert.Equal(expectedId, actualId);
+    }
+
+    [Fact]
+    public async void Save_WhenIdHasValue_KeepsIt()
+    {
+        var expectedId = Randomiser.AnId;
+        var unexpectedId = Randomiser.AnId;
+        var repo = Mocker.MakeRepo(unexpectedId);
+        SUT sut = new(repo, id: expectedId) { Validity = true };
         await sut.Save();
         var actualId = sut.Id;
         Assert.Equal(expectedId, actualId);
