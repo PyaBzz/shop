@@ -1,7 +1,6 @@
-namespace Core
+namespace Core;
+
+public interface IValidatable
 {
-    public interface IValidatable
-    {
-        bool IsValid { get; }
-    }
+    bool IsValid { get; }
 }

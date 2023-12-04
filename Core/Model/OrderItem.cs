@@ -1,49 +1,48 @@
-﻿namespace Core
+﻿namespace Core;
+
+public interface IOrderItem
 {
-    public interface IOrderItem
+    int ProductId { get; }
+    IProduct Product { get; }
+    int Quantity { get; }
+    decimal Price { get; }
+}
+
+public class OrderItem : IOrderItem
+{
+    // ==============================  Interface  ==============================
+
+    public int ProductId
     {
-        int ProductId { get; }
-        IProduct Product { get; }
-        int Quantity { get; }
-        decimal Price { get; }
-    }
-
-    public class OrderItem : IOrderItem
-    {
-        // ==============================  Interface  ==============================
-
-        public int ProductId
+        get
         {
-            get
-            {
-                if (Product.Id.HasValue) return Product.Id.Value;  //todo: use IsNew from the Product object
-                throw new Exception("The Product has no Id. This could result from an unpersisted Product object.");
-            }
-        }
-
-        public IProduct Product { get; private set; }
-
-        public int Quantity { get; private set; }
-
-        public decimal Price => Quantity * Product.Price;
-
-        // ==============================  State  ==============================
-
-        public int? Id { get; private set; }
-
-        // ==============================  Factory  ==============================
-
-        public OrderItem(IProduct prod, int qty, int? id)
-        {
-            Product = prod;
-            Quantity = qty;
-            Id = id;
+            if (Product.Id.HasValue) return Product.Id.Value;  //todo: use IsNew from the Product object
+            throw new Exception("The Product has no Id. This could result from an unpersisted Product object.");
         }
     }
 
-    public interface IProductRepo
+    public IProduct Product { get; private set; }
+
+    public int Quantity { get; private set; }
+
+    public decimal Price => Quantity * Product.Price;
+
+    // ==============================  State  ==============================
+
+    public int? Id { get; private set; }
+
+    // ==============================  Factory  ==============================
+
+    public OrderItem(IProduct prod, int qty, int? id)
     {
-        Task<int> Save(Product item);
-        Task<Product> Get(int id);
+        Product = prod;
+        Quantity = qty;
+        Id = id;
     }
+}
+
+public interface IProductRepo
+{
+    Task<int> Save(Product item);
+    Task<Product> Get(int id);
 }
