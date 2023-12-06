@@ -25,15 +25,16 @@ public class Order : Saveable, IOrder
 
     public decimal Price => items.Values.Sum(x => x.Price);
 
-    public async Task<int> Stage()
-    {
-        var id = await repo.Save(this);
-        if (IsNew)
-            Id = id;
-        return id;
-    }
+    public Task<int> Stage() => Save();
 
-    public override bool IsValid => throw new NotImplementedException();
+    public override bool IsValid => true;
+
+    public override async Task<int> Save()
+    {
+        Validate();
+        var id = await repo.Save(this);
+        return SetId(id);
+    }
 
     // ==============================  State  ==============================
 

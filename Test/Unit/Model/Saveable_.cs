@@ -6,7 +6,8 @@ public class Saveable_
     {
         public SUT() { }
         public SUT(int id) => Id = id;
-        public override bool IsValid => throw new NotImplementedException();
+        public override bool IsValid => true;
+        public override Task<int> Save() => throw new NotImplementedException();
     }
 
     [Fact]
