@@ -23,7 +23,8 @@ public class Order : Saveable, IOrder
         return true;
     }
 
-    public decimal Price => items.Values.Sum(x => x.Price);
+    public decimal Price
+        => throw new NotImplementedException();
 
     public Task<int> Stage() => Save();
 

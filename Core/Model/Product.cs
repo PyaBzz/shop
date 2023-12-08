@@ -24,25 +24,26 @@ public class Product : IProduct
 
     // ==============================  Factory  ==============================
 
-    public Product(string name, decimal price, DateTime releaseDate)
+    public Product(State state)
     {
-        Name = name;
-        Price = price;
-        ReleaseDate = releaseDate;
+        // id cannot be assigned in the ctor !
+        Name = state.Name;
+        Price = state.Price;
+        ReleaseDate = state.ReleaseDate;
     }
 
-    public static async Task<Product> Retrieve(ProductRepoConcept repo, int id)
+    public static async Task<Product> Retrieve(RepositoryConcept repo, int id)
     {
         var state = await repo.Get(id);
-        Product instance = new(state.Name, state.Price, state.ReleaseDate);
-        instance.Id = id;
+        Product instance = new(state);
+        instance.Id = state.Id;
         return instance;
     }
 
-    public async Task<int> Save(ProductRepoConcept repo)
+    public Task<int> Save(RepositoryConcept repo)
     {
         State state = new() { Id = Id, Name = Name, Price = Price, ReleaseDate = ReleaseDate };
-        return await repo.Save(state);
+        return repo.Save(state);
     }
 
     // ==============================  State  ==============================
@@ -54,10 +55,10 @@ public class Product : IProduct
         public decimal Price { get; set; }
         public DateTime ReleaseDate { get; set; }
     }
-}
 
-public interface ProductRepoConcept
-{
-    Task<Product.State> Get(int id);
-    Task<int> Save(Product.State state);
+    public interface RepositoryConcept
+    {
+        Task<State> Get(int id);
+        Task<int> Save(State state);
+    }
 }

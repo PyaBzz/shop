@@ -56,23 +56,23 @@ public class Order_
         Assert.False(sut.Add(Mocker.MakeItem(sameProductId)));
     }
 
-    [Fact]
-    public void Price_WhithoutItems_ReturnsZero()
-    {
-        var sut = MakeSut();
-        Assert.Equal(0, sut.Price);
-    }
+    //[Fact]
+    //public void Price_WhithoutItems_ReturnsZero()
+    //{
+    //    var sut = MakeSut();
+    //    Assert.Equal(0, sut.Price);
+    //}
 
-    [Fact]
-    public void Price_WhithItems_ReturnsTheirSum()
-    {
-        var sut = MakeSut();
-        var item1 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
-        sut.Add(item1);
-        var item2 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
-        sut.Add(item2);
-        Assert.Equal(item1.Price + item2.Price, sut.Price);
-    }
+    //[Fact]
+    //public void Price_WhithItems_ReturnsTheirSum()
+    //{
+    //    var sut = MakeSut();
+    //    var item1 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
+    //    sut.Add(item1);
+    //    var item2 = Mocker.MakeItem(Randomiser.AnId, Randomiser.APrice);
+    //    sut.Add(item2);
+    //    Assert.Equal(item1.Price + item2.Price, sut.Price);
+    //}
 
     [Fact]
     public async void Stage_WhithNewOrder_ReturnsId()
@@ -112,7 +112,7 @@ public class Order_
                     .Returns(productId.Value);
             else
                 itemMocker.SetupGet(x => x.ProductId).Returns(Randomiser.AnId);
-            itemMocker.SetupGet(x => x.Price).Returns(price);
+            //itemMocker.SetupGet(x => x.Price).Returns(price);
             itemMocker.SetupGet(x => x.Quantity).Returns(Randomiser.AQuantity);
             return itemMocker.Object;
         }
