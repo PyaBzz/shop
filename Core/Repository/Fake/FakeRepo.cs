@@ -1,6 +1,6 @@
 ﻿namespace Core;
 
-public abstract class FakeRepo<T>
+public class FakeRepo<T>
 {
     // ==============================  Interface  ==============================
 
