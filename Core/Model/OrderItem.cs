@@ -4,7 +4,7 @@ public interface OrderItemConcept
 {
     int? Id { get; }
     int ProductId { get; }
-    Task<ProductConcept> Product { get; }
+    Task<Product> GetProduct(Product.RepositoryConcept repo);
     int Quantity { get; }
     Task<decimal> Price { get; }
 }
@@ -17,7 +17,7 @@ public class OrderItem : OrderItemConcept
 
     public int ProductId { get; }
 
-    public Task<ProductConcept> Product //Reads from datastore based on ProductId
+    public Task<Product> GetProduct(Product.RepositoryConcept repo)
         => throw new NotImplementedException();
 
     public int Quantity { get; set; }
