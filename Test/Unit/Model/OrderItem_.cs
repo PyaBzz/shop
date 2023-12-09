@@ -2,9 +2,9 @@ namespace Unit;
 
 public class OrderItem_
 {
-    private Mock<IProduct> productMocker = new Mock<IProduct>();
+    private Mock<ProductConcept> productMocker = new Mock<ProductConcept>();
 
-    private IProduct productMock => productMocker.Object;
+    private ProductConcept productMock => productMocker.Object;
 
     //[Fact]
     //public void Price_MultipliesUnitPriceByQuantity()

@@ -1,15 +1,15 @@
 ﻿namespace Core;
 
-public interface IOrderItem
+public interface OrderItemConcept
 {
     int? Id { get; }
     int ProductId { get; }
-    Task<IProduct> Product { get; }
+    Task<ProductConcept> Product { get; }
     int Quantity { get; }
     Task<decimal> Price { get; }
 }
 
-public class OrderItem : IOrderItem
+public class OrderItem : OrderItemConcept
 {
     // ==============================  Interface  ==============================
 
@@ -17,7 +17,7 @@ public class OrderItem : IOrderItem
 
     public int ProductId { get; }
 
-    public Task<IProduct> Product //Reads from datastore based on ProductId
+    public Task<ProductConcept> Product //Reads from datastore based on ProductId
         => throw new NotImplementedException();
 
     public int Quantity { get; set; }

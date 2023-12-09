@@ -1,6 +1,6 @@
 ﻿namespace Core;
 
-public interface IProduct
+public interface ProductConcept
 {
     int? Id { get; }
     string Name { get; set; }
@@ -8,7 +8,7 @@ public interface IProduct
     DateTime ReleaseDate { get; set; }
 }
 
-public class Product : IProduct
+public class Product : ProductConcept
 {
     // ==============================  Interface  ==============================
 
@@ -42,7 +42,7 @@ public class Product : IProduct
 
     public Task<int> Save(RepositoryConcept repo)
     {
-        State state = new() { Id = Id, Name = Name, Price = Price, ReleaseDate = ReleaseDate };
+        State state = GetState();
         return repo.Save(state);
     }
 
@@ -55,6 +55,18 @@ public class Product : IProduct
         public decimal Price { get; set; }
         public DateTime ReleaseDate { get; set; }
     }
+
+    private State GetState() => new()
+    {
+        Id = Id,
+        Name = Name,
+        Price = Price,
+        ReleaseDate = ReleaseDate
+    };
+
+    // ==============================  Internal Logic  ==============================
+
+    // ==============================  Dependencies  ==============================
 
     public interface RepositoryConcept
     {

@@ -1,63 +1,69 @@
 ﻿namespace Core;
 
-public interface IOrder
+public interface OrderConcept
 {
-    bool Add(IOrderItem item);
-    ImmutableDictionary<int, IOrderItem> Items { get; }
-    decimal Price { get; }
-    Task<int> Stage();
+    int? Id { get; }
+    bool Add(int itemId);
+    Task<decimal> Price { get; }
 }
 
-public class Order : Saveable, IOrder
+public class Order : OrderConcept
 {
     // ==============================  Interface  ==============================
 
-    public ImmutableDictionary<int, IOrderItem> Items
-        => items.ToImmutableDictionary();
+    public int? Id { get; private set; }
 
-    public bool Add(IOrderItem item)
+    public bool Add(int itemId)
     {
-        if (items.ContainsKey(item.ProductId))
+        if (itemIds.Contains(itemId))
             return false;
-        items.Add(item.ProductId, item);
+        itemIds.Add(itemId);
         return true;
     }
 
-    public decimal Price
+    public Task<decimal> Price
         => throw new NotImplementedException();
 
-    public Task<int> Stage() => Save();
+    // ==============================  Factory  ==============================
 
-    public override bool IsValid => true;
-
-    public override async Task<int> Save()
+    public Order(State state)
     {
-        Validate();
-        var id = await repo.Save(this);
-        return SetId(id);
+        // id cannot be assigned in the ctor !
+        itemIds = new List<int>();
+    }
+
+    public static async Task<Order> Retrieve(RepositoryConcept repo, int id)
+    {
+        var state = await repo.Get(id);
+        Order instance = new(state);
+        instance.Id = state.Id;
+        return instance;
+    }
+
+    public Task<int> Save(RepositoryConcept repo)
+    {
+        var state = GetState();
+        return repo.Save(state);
     }
 
     // ==============================  State  ==============================
 
-    private Dictionary<int, IOrderItem> items;
-
-    private IOrderRepo repo;
-
-    // ==============================  Factory  ==============================
-
-    public Order(IOrderRepo r)
+    public class State
     {
-        items = new Dictionary<int, IOrderItem>();
-        repo = r;
+        public int? Id { get; set; }
     }
 
-    public Order(Dictionary<int, IOrderItem> itmz, int? id)
-    {
-        items = itmz;
-        Id = id;
-    }
+    private State GetState() => new() { Id = Id };
 
     // ==============================  Internal Logic  ==============================
 
-    // private stuff
+    private List<int> itemIds;
+
+    // ==============================  Dependencies  ==============================
+
+    public interface RepositoryConcept
+    {
+        Task<State> Get(int id);
+        Task<int> Save(State state);
+    }
 }
