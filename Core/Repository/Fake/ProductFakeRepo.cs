@@ -1,15 +1,15 @@
 ﻿namespace Core;
 
-public class OrderItemFakeRepo : OrderItem.RepositoryConcept
+public class ProductFakeRepo : Product.RepositoryConcept
 {
     // ==============================  Interface  ==============================
 
-    public Task<OrderItem.State> Get(int id)
+    public Task<Product.State> Get(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<int> Save(OrderItem.State state)
+    public Task<int> Save(Product.State state)
     {
         throw new NotImplementedException();
     }
