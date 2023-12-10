@@ -2,7 +2,7 @@
 
 public class FakeRepo<T>
 {
-    // ==============================  Interface  ==============================
+    #region ==============================  Interface  ==============================
 
     public Task<int> Save(T x)
     {
@@ -24,7 +24,10 @@ public class FakeRepo<T>
         return Task.FromResult<T>(default);
     }
 
-    // ==============================  Internal Logic  ==============================
+    #endregion
+    #region ==============================  Internal Logic  ==============================
 
     private readonly ConcurrentDictionary<int, T> data = new();
+
+    #endregion
 }

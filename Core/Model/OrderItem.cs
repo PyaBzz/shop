@@ -1,4 +1,6 @@
-﻿namespace Core;
+﻿using System.Xml.Linq;
+
+namespace Core;
 
 public interface OrderItemConcept
 {
@@ -11,7 +13,7 @@ public interface OrderItemConcept
 
 public class OrderItem : OrderItemConcept
 {
-    // ==============================  Interface  ==============================
+    #region ==============================  Interface  ==============================
 
     public int? Id { get; private set; }
 
@@ -25,7 +27,8 @@ public class OrderItem : OrderItemConcept
     public Task<decimal> Price //Reads from product
         => throw new NotImplementedException();
 
-    // ==============================  Factory  ==============================
+    #endregion
+    #region ==============================  Factory  ==============================
 
     public OrderItem(State state)
     {
@@ -44,11 +47,12 @@ public class OrderItem : OrderItemConcept
 
     public Task<int> Save(RepositoryConcept repo)
     {
-        State state = new() { Id = Id, ProductId = ProductId, Quantity = Quantity };
+        var state = GetState();
         return repo.Save(state);
     }
 
-    // ==============================  State  ==============================
+    #endregion
+    #region ==============================  State  ==============================
 
     public class State
     {
@@ -57,9 +61,24 @@ public class OrderItem : OrderItemConcept
         public int Quantity { get; set; }
     }
 
+    private State GetState() => new()
+    {
+        Id = Id,
+        ProductId = ProductId,
+        Quantity = Quantity
+    };
+
+    #endregion
+    #region ==============================  Internal Logic  ==============================
+
+    #endregion
+    #region ==============================  Dependencies  ==============================
+
     public interface RepositoryConcept
     {
         Task<State> Get(int id);
         Task<int> Save(State state);
     }
+
+    #endregion
 }

@@ -10,7 +10,7 @@ public interface ProductConcept
 
 public class Product : ProductConcept
 {
-    // ==============================  Interface  ==============================
+    #region ==============================  Interface  ==============================
 
     public int? Id { get; private set; }
 
@@ -22,7 +22,8 @@ public class Product : ProductConcept
     [PastDate]
     public DateTime ReleaseDate { get; set; }
 
-    // ==============================  Factory  ==============================
+    #endregion
+    #region ==============================  Factory  ==============================
 
     public Product(State state)
     {
@@ -42,11 +43,12 @@ public class Product : ProductConcept
 
     public Task<int> Save(RepositoryConcept repo)
     {
-        State state = GetState();
+        var state = GetState();
         return repo.Save(state);
     }
 
-    // ==============================  State  ==============================
+    #endregion
+    #region ==============================  State  ==============================
 
     public class State
     {
@@ -64,13 +66,17 @@ public class Product : ProductConcept
         ReleaseDate = ReleaseDate
     };
 
-    // ==============================  Internal Logic  ==============================
+    #endregion
+    #region ==============================  Internal Logic  ==============================
 
-    // ==============================  Dependencies  ==============================
+    #endregion
+    #region ==============================  Dependencies  ==============================
 
     public interface RepositoryConcept
     {
         Task<State> Get(int id);
         Task<int> Save(State state);
     }
+
+    #endregion
 }

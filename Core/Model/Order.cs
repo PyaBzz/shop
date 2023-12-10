@@ -9,7 +9,7 @@ public interface OrderConcept
 
 public class Order : OrderConcept
 {
-    // ==============================  Interface  ==============================
+    #region ==============================  Interface  ==============================
 
     public int? Id { get; private set; }
 
@@ -24,7 +24,8 @@ public class Order : OrderConcept
     public Task<decimal> Price
         => throw new NotImplementedException();
 
-    // ==============================  Factory  ==============================
+    #endregion
+    #region ==============================  Factory  ==============================
 
     public Order(State state)
     {
@@ -46,7 +47,8 @@ public class Order : OrderConcept
         return repo.Save(state);
     }
 
-    // ==============================  State  ==============================
+    #endregion
+    #region ==============================  State  ==============================
 
     public class State
     {
@@ -55,15 +57,19 @@ public class Order : OrderConcept
 
     private State GetState() => new() { Id = Id };
 
-    // ==============================  Internal Logic  ==============================
+    #endregion
+    #region ==============================  Internal Logic  ==============================
 
     private List<int> itemIds;
 
-    // ==============================  Dependencies  ==============================
+    #endregion
+    #region ==============================  Dependencies  ==============================
 
     public interface RepositoryConcept
     {
         Task<State> Get(int id);
         Task<int> Save(State state);
     }
+
+    #endregion
 }
