@@ -33,7 +33,7 @@ public class Product : ProductConcept
         ReleaseDate = state.ReleaseDate;
     }
 
-    public static async Task<Product> Retrieve(RepositoryConcept repo, int id)
+    public static async Task<Product> Get(RepositoryConcept repo, int id)
     {
         var state = await repo.Get(id);
         Product instance = new(state);

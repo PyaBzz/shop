@@ -37,7 +37,7 @@ public class OrderItem : OrderItemConcept
         Quantity = state.Quantity;
     }
 
-    public static async Task<OrderItem> Retrieve(RepositoryConcept repo, int id)
+    public static async Task<OrderItem> Get(RepositoryConcept repo, int id)
     {
         var state = await repo.Get(id);
         OrderItem instance = new(state);

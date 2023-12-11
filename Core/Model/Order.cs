@@ -33,7 +33,7 @@ public class Order : OrderConcept
         itemIds = new List<int>();
     }
 
-    public static async Task<Order> Retrieve(RepositoryConcept repo, int id)
+    public static async Task<Order> Get(RepositoryConcept repo, int id)
     {
         var state = await repo.Get(id);
         Order instance = new(state);
