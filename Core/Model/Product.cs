@@ -33,18 +33,18 @@ public class Product : ProductConcept
         ReleaseDate = state.ReleaseDate;
     }
 
+    public Task<int> Save(RepositoryConcept repo)
+    {
+        var state = GetState();
+        return repo.Save(state);
+    }
+
     public static async Task<Product> Get(RepositoryConcept repo, int id)
     {
         var state = await repo.Get(id);
         Product instance = new(state);
         instance.Id = state.Id;
         return instance;
-    }
-
-    public Task<int> Save(RepositoryConcept repo)
-    {
-        var state = GetState();
-        return repo.Save(state);
     }
 
     #endregion
@@ -74,8 +74,9 @@ public class Product : ProductConcept
 
     public interface RepositoryConcept
     {
-        Task<State> Get(int id);
         Task<int> Save(State state);
+        Task<State> Get(int id);
+        //Task<State> Get(int[] ids);
     }
 
     #endregion

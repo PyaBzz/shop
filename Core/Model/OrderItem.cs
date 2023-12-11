@@ -37,18 +37,18 @@ public class OrderItem : OrderItemConcept
         Quantity = state.Quantity;
     }
 
+    public Task<int> Save(RepositoryConcept repo)
+    {
+        var state = GetState();
+        return repo.Save(state);
+    }
+
     public static async Task<OrderItem> Get(RepositoryConcept repo, int id)
     {
         var state = await repo.Get(id);
         OrderItem instance = new(state);
         instance.Id = state.Id;
         return instance;
-    }
-
-    public Task<int> Save(RepositoryConcept repo)
-    {
-        var state = GetState();
-        return repo.Save(state);
     }
 
     #endregion
@@ -76,8 +76,9 @@ public class OrderItem : OrderItemConcept
 
     public interface RepositoryConcept
     {
-        Task<State> Get(int id);
         Task<int> Save(State state);
+        Task<State> Get(int id);
+        //Task<State> Get(int[] ids);
     }
 
     #endregion
