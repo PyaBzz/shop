@@ -78,7 +78,7 @@ public class OrderItem : OrderItemConcept
     {
         Task<int> Save(State state);
         Task<State> Get(int id);
-        //Task<State> Get(int[] ids);
+        Task<State[]> Get(int[] ids);
     }
 
     #endregion

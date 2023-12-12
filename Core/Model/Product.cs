@@ -76,7 +76,7 @@ public class Product : ProductConcept
     {
         Task<int> Save(State state);
         Task<State> Get(int id);
-        //Task<State> Get(int[] ids);
+        Task<State[]> Get(int[] ids);
     }
 
     #endregion

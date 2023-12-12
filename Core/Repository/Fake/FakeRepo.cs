@@ -24,6 +24,15 @@ public class FakeRepo<T>
         return Task.FromResult<T>(default);
     }
 
+    public Task<T[]> Get(int[] ids)
+    {
+        var existingIds = ids.Where(id => data.ContainsKey(id));
+        var items = existingIds
+            .Select(id => data[id])
+            .ToArray();
+        return Task.FromResult(items);
+    }
+
     #endregion
     #region ==============================  Internal Logic  ==============================
 
