@@ -52,6 +52,7 @@ public interface OrderItemRepoConcept
     Task<int> Save(OrderItemConcept orderItem);
     Task<OrderItemConcept> Get(int id);
     Task<OrderItemConcept[]> Get(int[] ids);
+    Task<OrderItemConcept[]> GetForOrder(int orderId);
 }
 
 #endregion

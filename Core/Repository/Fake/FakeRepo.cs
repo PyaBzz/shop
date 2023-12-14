@@ -36,7 +36,7 @@ public class FakeRepo<T>
     #endregion
     #region ==============================  Internal Logic  ==============================
 
-    private readonly ConcurrentDictionary<int, T> data = new();
+    protected readonly ConcurrentDictionary<int, T> data = new();
 
     #endregion
 }
