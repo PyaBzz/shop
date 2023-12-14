@@ -1,5 +1,5 @@
 ﻿namespace Core;
 
-public class OrderFakeRepo : FakeRepo<Order.State>, Order.RepositoryConcept
+public class OrderFakeRepo : FakeRepo<OrderConcept>, Order.RepositoryConcept
 {
 }
