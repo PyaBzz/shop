@@ -22,7 +22,7 @@ public class OrderItem_
         productMocker
             .SetupGet(x => x.Price)
             .Returns(price);
-        var sut = new OrderItem(Randomiser.AnId, quantity);
+        var sut = new OrderItem(It.IsAny<int>(), It.IsAny<int>(), quantity);
         var expected = quantity * price;
         Assert.Equal(expected, await sut.GetPrice(productRepo));
     }

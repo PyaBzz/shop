@@ -3,9 +3,10 @@
 public interface OrderItemConcept
 {
     int? Id { get; }
+    int? OrderId { get; }
     int ProductId { get; }
-    Task<ProductConcept> GetProduct(ProductRepoConcept repo);
     int Quantity { get; }
+    Task<ProductConcept> GetProduct(ProductRepoConcept repo);
     Task<decimal> GetPrice(ProductRepoConcept repo);
 }
 
@@ -14,6 +15,8 @@ public class OrderItem : OrderItemConcept
     #region ==============================  Interface  ==============================
 
     public int? Id { get; private set; }
+
+    public int? OrderId { get; private set; }
 
     public int ProductId { get; }
 
@@ -28,8 +31,9 @@ public class OrderItem : OrderItemConcept
     #endregion
     #region ==============================  Factory  ==============================
 
-    public OrderItem(int productId, int quantity, int? id = null)
+    public OrderItem(int orderId, int productId, int quantity, int? id = null)
     {
+        OrderId = orderId;
         ProductId = productId;
         Quantity = quantity;
         Id = id;
