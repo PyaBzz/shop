@@ -1,5 +1,5 @@
 ﻿namespace Core;
 
-public class ProductFakeRepo : FakeRepo<Product.State>, Product.RepositoryConcept
+public class ProductFakeRepo : FakeRepo<ProductConcept>, ProductRepoConcept
 {
 }

@@ -3,17 +3,27 @@ namespace Unit;
 public class OrderItem_
 {
     private Mock<ProductConcept> productMocker = new Mock<ProductConcept>();
+    private ProductConcept product => productMocker.Object;
+    private Mock<ProductRepoConcept> productRepoMocker = new();
+    private ProductRepoConcept productRepo => productRepoMocker.Object;
 
-    private ProductConcept productMock => productMocker.Object;
+    public OrderItem_()
+    {
+        productRepoMocker
+            .Setup(x => x.Get(It.IsAny<int>()))
+            .ReturnsAsync(product);
+    }
 
-    //[Fact]
-    //public void Price_MultipliesUnitPriceByQuantity()
-    //{
-    //    var price = Randomiser.APrice;
-    //    var quantity = Randomiser.AQuantity;
-    //    productMocker.SetupGet(x => x.Price).Returns(price);
-    //    var sut = new OrderItem(productMock, quantity, null);
-
-    //    Assert.Equal(quantity * price, sut.Price, 8);
-    //}
+    [Fact]
+    public async Task Price_MultipliesUnitPriceByQuantityAsync()
+    {
+        var price = Randomiser.APrice;
+        var quantity = Randomiser.AQuantity;
+        productMocker
+            .SetupGet(x => x.Price)
+            .Returns(price);
+        var sut = new OrderItem(Randomiser.AnId, quantity);
+        var expected = quantity * price;
+        Assert.Equal(expected, await sut.GetPrice(productRepo));
+    }
 }

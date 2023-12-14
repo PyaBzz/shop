@@ -25,59 +25,27 @@ public class Product : ProductConcept
     #endregion
     #region ==============================  Factory  ==============================
 
-    public Product(State state)
+    public Product(string name, decimal price, DateTime releaseDate, int? id = null)
     {
-        // id cannot be assigned in the ctor !
-        Name = state.Name;
-        Price = state.Price;
-        ReleaseDate = state.ReleaseDate;
+        Id = id;
+        Name = name;
+        Price = price;
+        ReleaseDate = releaseDate;
     }
-
-    public Task<int> Save(RepositoryConcept repo)
-    {
-        var state = GetState();
-        return repo.Save(state);
-    }
-
-    public static async Task<Product> Get(RepositoryConcept repo, int id)
-    {
-        var state = await repo.Get(id);
-        Product instance = new(state);
-        instance.Id = state.Id;
-        return instance;
-    }
-
-    #endregion
-    #region ==============================  State  ==============================
-
-    public class State
-    {
-        public int? Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public DateTime ReleaseDate { get; set; }
-    }
-
-    private State GetState() => new()
-    {
-        Id = Id,
-        Name = Name,
-        Price = Price,
-        ReleaseDate = ReleaseDate
-    };
 
     #endregion
     #region ==============================  Internal Logic  ==============================
 
     #endregion
-    #region ==============================  Dependencies  ==============================
-
-    public interface RepositoryConcept
-    {
-        Task<int> Save(State state);
-        Task<State> Get(int id);
-        Task<State[]> Get(int[] ids);
-    }
-
-    #endregion
 }
+
+#region ==============================  Dependencies  ==============================
+
+public interface ProductRepoConcept
+{
+    Task<int> Save(ProductConcept product);
+    Task<ProductConcept> Get(int id);
+    Task<ProductConcept[]> Get(int[] ids);
+}
+
+#endregion

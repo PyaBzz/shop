@@ -1,14 +1,12 @@
-﻿using System.Xml.Linq;
-
-namespace Core;
+﻿namespace Core;
 
 public interface OrderItemConcept
 {
     int? Id { get; }
     int ProductId { get; }
-    Task<Product> GetProduct(Product.RepositoryConcept repo);
+    Task<ProductConcept> GetProduct(ProductRepoConcept repo);
     int Quantity { get; }
-    Task<decimal> Price { get; }
+    Task<decimal> GetPrice(ProductRepoConcept repo);
 }
 
 public class OrderItem : OrderItemConcept
@@ -19,67 +17,37 @@ public class OrderItem : OrderItemConcept
 
     public int ProductId { get; }
 
-    public Task<Product> GetProduct(Product.RepositoryConcept repo)
-        => throw new NotImplementedException();
+    public Task<ProductConcept> GetProduct(ProductRepoConcept repo)
+        => repo.Get(ProductId);
 
     public int Quantity { get; set; }
 
-    public Task<decimal> Price //Reads from product
-        => throw new NotImplementedException();
+    public async Task<decimal> GetPrice(ProductRepoConcept repo)
+        => Quantity * (await GetProduct(repo)).Price;
 
     #endregion
     #region ==============================  Factory  ==============================
 
-    public OrderItem(State state)
+    public OrderItem(int productId, int quantity, int? id = null)
     {
-        // id cannot be assigned in the ctor !
-        ProductId = state.ProductId;
-        Quantity = state.Quantity;
+        ProductId = productId;
+        Quantity = quantity;
+        Id = id;
     }
-
-    public Task<int> Save(RepositoryConcept repo)
-    {
-        var state = GetState();
-        return repo.Save(state);
-    }
-
-    public static async Task<OrderItem> Get(RepositoryConcept repo, int id)
-    {
-        var state = await repo.Get(id);
-        OrderItem instance = new(state);
-        instance.Id = state.Id;
-        return instance;
-    }
-
-    #endregion
-    #region ==============================  State  ==============================
-
-    public class State
-    {
-        public int? Id { get; set; }
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-    }
-
-    private State GetState() => new()
-    {
-        Id = Id,
-        ProductId = ProductId,
-        Quantity = Quantity
-    };
 
     #endregion
     #region ==============================  Internal Logic  ==============================
 
     #endregion
-    #region ==============================  Dependencies  ==============================
-
-    public interface RepositoryConcept
-    {
-        Task<int> Save(State state);
-        Task<State> Get(int id);
-        Task<State[]> Get(int[] ids);
-    }
-
-    #endregion
 }
+
+#region ==============================  Dependencies  ==============================
+
+public interface OrderItemRepoConcept
+{
+    Task<int> Save(OrderItemConcept orderItem);
+    Task<OrderItemConcept> Get(int id);
+    Task<OrderItemConcept[]> Get(int[] ids);
+}
+
+#endregion
